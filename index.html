@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>جوملە | jwmla</title>
+<meta name="theme-color" content="#7C3AED">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#7C3AED;
+    --purple-dark:#6423C6;
+    --purple-light:#F3EBFF;
+    --purple-border:#E4D4FB;
+    --green:#16A34A;
+    --green-dark:#0F7A38;
+    --text:#1F1330;
+    --muted:#8A7B9E;
+    --bg:#FBFAFD;
+    --danger:#EF4444;
+    --radius:18px;
+    --shadow:0 4px 18px rgba(124,58,237,0.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Noto Kufi Arabic', 'Segoe UI', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:40px;
+  }
+  button{font-family:inherit; cursor:pointer;}
+  input,select,textarea{font-family:inherit;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+
+  /* ===== Header ===== */
+  .topbar{
+    background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+    padding:16px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:40;
+    box-shadow:0 2px 14px rgba(100,35,198,0.25);
+  }
+  .phone-pill{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:linear-gradient(135deg,var(--green),var(--green-dark));
+    border:1px solid rgba(255,255,255,0.35);
+    padding:8px 14px;
+    border-radius:999px;
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    white-space:nowrap;
+    box-shadow:0 2px 8px rgba(15,122,56,0.35);
+  }
+  .phone-pill svg{flex-shrink:0;}
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#fff;
+  }
+  .brand-icon{
+    width:38px;height:38px;
+    background:rgba(255,255,255,0.18);
+    border:1px solid rgba(255,255,255,0.35);
+    border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .brand-name{font-size:22px;font-weight:800;letter-spacing:.3px;}
+
+  /* ===== Subheader (menu / search) ===== */
+  .subbar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 16px 6px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .menu-wrap{position:relative;flex-shrink:0;}
+  .icon-btn{
+    width:44px;height:44px;
+    border-radius:12px;
+    border:1px solid var(--purple-border);
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--purple);
+    box-shadow:var(--shadow);
+  }
+  .icon-btn:active{transform:scale(0.95);}
+  .dropdown{
+    position:absolute;
+    top:52px;
+    right:0;
+    background:#fff;
+    border:1px solid var(--purple-border);
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(100,35,198,0.18);
+    min-width:190px;
+    padding:8px;
+    display:none;
+    z-index:60;
+  }
+  .dropdown.open{display:block;}
+  .dropdown button{
+    width:100%;
+    text-align:right;
+    background:none;
+    border:none;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .dropdown button:hover{background:var(--purple-light);color:var(--purple-dark);}
+
+  .search-wrap{
+    flex:1;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;
+    padding:12px 44px 12px 14px;
+    border-radius:12px;
+    border:1px solid var(--purple-border);
+    background:#fff;
+    font-size:15px;
+    outline:none;
+    box-shadow:var(--shadow);
+  }
+  .search-wrap input:focus{border-color:var(--purple);}
+  .search-wrap svg{
+    position:absolute;
+    top:50%;right:14px;
+    transform:translateY(-50%);
+    color:var(--muted);
+    pointer-events:none;
+  }
+
+  /* ===== Tabs ===== */
+  .tabs{
+    max-width:1100px;
+    margin:10px auto 0;
+    padding:0 16px;
+    display:flex;
+    gap:8px;
+  }
+  .tab-btn{
+    flex:1;
+    padding:12px 10px;
+    border-radius:12px;
+    border:1px solid var(--purple-border);
+    background:#fff;
+    color:var(--purple-dark);
+    font-weight:700;
+    font-size:15px;
+  }
+  .tab-btn.active{
+    background:var(--purple);
+    color:#fff;
+    border-color:var(--purple);
+  }
+
+  /* ===== Grid ===== */
+  .grid{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    padding:16px;
+  }
+  @media (min-width:600px){ .grid{grid-template-columns:repeat(3,1fr);} }
+  @media (min-width:900px){ .grid{grid-template-columns:repeat(4,1fr);} }
+
+  .card{
+    background:#fff;
+    border:1px solid var(--purple-border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+  }
+  .card-media{
+    position:relative;
+    height:200px;
+    background:var(--purple-light);
+    cursor:pointer;
+  }
+  .card-media img{width:100%;height:200px;object-fit:cover;display:block;}
+  .card-actions{
+    position:absolute;
+    top:8px;right:8px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    z-index:5;
+  }
+  .mini-btn{
+    width:34px;height:34px;
+    border-radius:999px;
+    border:none;
+    background:rgba(255,255,255,0.92);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+  }
+  .mini-btn.edit{color:var(--purple);}
+  .mini-btn.delete{color:var(--danger);}
+  .card-badge{
+    position:absolute;
+    bottom:8px;right:8px;
+    background:var(--purple);
+    color:#fff;
+    font-weight:700;
+    font-size:12px;
+    line-height:1.3;
+    text-align:center;
+    padding:6px 10px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(100,35,198,0.35);
+  }
+  .card-body{padding:12px 14px 14px;flex:1;display:flex;flex-direction:column;gap:4px;}
+  .card-title{font-size:16px;font-weight:700;color:var(--text);min-height:22px;}
+  .price-main{font-size:22px;font-weight:800;color:var(--purple-dark);display:flex;align-items:baseline;gap:6px;}
+  .price-main span.label{font-size:12px;font-weight:600;color:var(--muted);}
+  .price-carton{font-size:13px;font-weight:700;color:var(--text);}
+  .price-carton span{color:var(--muted);font-weight:600;}
+  .barcode-wrap{margin-top:6px;}
+  .barcode-bars{
+    height:26px;
+    background:repeating-linear-gradient(90deg,#1F1330 0 2px, transparent 2px 4px, #1F1330 4px 5px, transparent 5px 8px, #1F1330 8px 10px, transparent 10px 13px);
+    opacity:0.85;
+    border-radius:2px;
+  }
+  .barcode-num{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;text-align:center;font-family:monospace;}
+
+  .empty-state{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+  }
+  .empty-state svg{margin-bottom:10px;color:var(--purple-border);}
+  .empty-state p{font-size:16px;font-weight:600;}
+
+  /* ===== Modal ===== */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(31,19,48,0.55);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:100;
+    padding:0;
+  }
+  .overlay.open{display:flex;}
+  @media (min-width:640px){
+    .overlay{align-items:center;padding:20px;}
+  }
+  .modal{
+    background:#fff;
+    width:100%;
+    max-width:520px;
+    max-height:92vh;
+    overflow-y:auto;
+    border-radius:22px 22px 0 0;
+    padding:20px;
+    position:relative;
+    animation:slideUp .25s ease;
+  }
+  @media (min-width:640px){ .modal{border-radius:22px;} }
+  @keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .modal-close{
+    position:absolute;top:16px;left:16px;
+    width:34px;height:34px;
+    border-radius:999px;
+    border:none;
+    background:var(--purple-light);
+    color:var(--purple-dark);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal h2{margin:0 0 16px;font-size:19px;color:var(--purple-dark);padding-left:40px;}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+  .field input[type=text],
+  .field input[type=number],
+  .field input[type=url],
+  .field select,
+  .field textarea{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--purple-border);
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    background:#fbfaff;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);background:#fff;}
+  .field textarea{min-height:70px;resize:vertical;}
+  .req{color:var(--danger);}
+  .radio-row{display:flex;gap:10px;}
+  .radio-opt{
+    flex:1;
+    border:1px solid var(--purple-border);
+    border-radius:10px;
+    padding:10px;
+    text-align:center;
+    font-weight:700;
+    font-size:14px;
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .radio-opt.selected{background:var(--purple);color:#fff;border-color:var(--purple);}
+  .radio-opt input{display:none;}
+  .cat-row{display:flex;gap:8px;}
+  .cat-row select{flex:1;}
+  .cat-row button{
+    flex-shrink:0;
+    width:44px;
+    border-radius:10px;
+    border:1px solid var(--purple-border);
+    background:var(--purple-light);
+    color:var(--purple-dark);
+    font-size:20px;
+    font-weight:700;
+  }
+  .img-preview{
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    background:var(--purple-light);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    margin-bottom:10px;
+    color:var(--muted);
+    font-size:13px;
+  }
+  .img-preview img{width:100%;height:100%;object-fit:cover;}
+  .form-actions{display:flex;gap:10px;margin-top:8px;}
+  .btn{
+    flex:1;
+    padding:13px;
+    border-radius:12px;
+    border:none;
+    font-weight:700;
+    font-size:15px;
+  }
+  .btn-primary{background:var(--purple);color:#fff;}
+  .btn-primary:disabled{opacity:0.6;}
+  .btn-secondary{background:var(--purple-light);color:var(--purple-dark);}
+
+  /* Detail modal specifics */
+  .detail-img{width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;margin-bottom:14px;background:var(--purple-light);}
+  .detail-img img{width:100%;height:100%;object-fit:cover;}
+  .detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--purple-border);font-size:14px;}
+  .detail-row span:first-child{color:var(--muted);font-weight:600;}
+  .detail-row span:last-child{font-weight:700;}
+  .detail-desc{margin-top:12px;font-size:14px;line-height:1.7;color:var(--text);}
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="topbar">
+  <a class="phone-pill" href="tel:07508457841">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <span dir="ltr">07508457841</span>
+  </a>
+  <div class="brand">
+    <span class="brand-name" id="brandName">جوملە</span>
+    <span class="brand-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 21V13h6v8"/></svg>
+    </span>
+  </div>
+</header>
+
+<!-- ===== Subheader: menu + search ===== -->
+<div class="subbar">
+  <div class="menu-wrap">
+    <button class="icon-btn" id="menuBtn" aria-label="menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+    </button>
+    <div class="dropdown" id="dropdown">
+      <button id="menuLang">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span id="menuLangText">گۆڕینی زمان</span>
+      </button>
+      <button id="menuInfo">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span id="menuInfoText">زانیاری</span>
+      </button>
+      <button id="menuAdd">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span id="menuAddText">زیادکردنی کاڵا</span>
+      </button>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="گەڕان بۆ کاڵا...">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+  </div>
+</div>
+
+<!-- ===== Tabs ===== -->
+<div class="tabs">
+  <button class="tab-btn active" id="tabMain" data-section="main">بەشی سەرەکی</button>
+  <button class="tab-btn" id="tabOffers" data-section="offers">بەشی ئۆفەر</button>
+</div>
+
+<!-- ===== Product grid ===== -->
+<div class="grid" id="grid"></div>
+
+<!-- ===== Detail modal ===== -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal">
+    <button class="modal-close" id="detailClose">✕</button>
+    <div class="detail-img"><img id="detailImg" src="" alt="" referrerpolicy="no-referrer" onerror="handleImgError(this)"></div>
+    <h2 id="detailName" style="padding-left:0;"></h2>
+    <div class="detail-row"><span id="lblPieceD">نرخی دانه</span><span id="detailPiece"></span></div>
+    <div class="detail-row"><span id="lblCartonD">نرخی کارتۆن</span><span id="detailCarton"></span></div>
+    <div class="detail-row"><span id="lblUnitsD">دانه/کارتۆن</span><span id="detailUnits"></span></div>
+    <div class="detail-row"><span id="lblCatD">جۆر</span><span id="detailCat"></span></div>
+    <div class="detail-row"><span id="lblBarcodeD">بارکۆد</span><span id="detailBarcode"></span></div>
+    <div class="detail-desc" id="detailDesc"></div>
+  </div>
+</div>
+
+<!-- ===== Information modal ===== -->
+<div class="overlay" id="infoOverlay">
+  <div class="modal" style="max-width:420px;">
+    <button class="modal-close" id="infoClose">✕</button>
+    <h2 id="infoTitle">زانیاری</h2>
+    <p id="infoText" style="font-size:15px;line-height:2;color:var(--text);margin:0;"></p>
+  </div>
+</div>
+
+<!-- ===== Add/Edit form modal ===== -->
+<div class="overlay" id="formOverlay">
+  <div class="modal">
+    <button class="modal-close" id="formClose">✕</button>
+    <h2 id="formTitle">زیادکردنی کاڵا</h2>
+    <form id="productForm">
+      <input type="hidden" id="prodId">
+      <div class="field">
+        <label id="lblImage">لینکی وێنه (URL)</label>
+        <div class="img-preview" id="imgPreview">وێنه لێرە دەردەکەوێت</div>
+        <input type="url" id="fImage" placeholder="https://i.ibb.co/xxxx.jpg" required>
+      </div>
+      <div class="field">
+        <label id="lblName">ناوی کاڵا <span class="req">*</span></label>
+        <input type="text" id="fName" required>
+      </div>
+      <div class="field">
+        <label id="lblCategory">جۆر / پۆل</label>
+        <div class="cat-row">
+          <select id="fCategory"></select>
+          <button type="button" id="addCatBtn">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label id="lblSection">شوێنی دەرکەوتن</label>
+        <div class="radio-row">
+          <label class="radio-opt selected" id="optMain">
+            <input type="radio" name="section" value="main" checked>
+            <span id="optMainText">بەشی سەرەکی</span>
+          </label>
+          <label class="radio-opt" id="optOffers">
+            <input type="radio" name="section" value="offers">
+            <span id="optOffersText">بەشی ئۆفەر</span>
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <label id="lblPiece">نرخی دانه <span class="req">*</span></label>
+        <input type="number" id="fPiece" min="0" step="1" required>
+      </div>
+      <div class="field">
+        <label id="lblCarton">نرخی کارتۆن</label>
+        <input type="number" id="fCarton" min="0" step="1">
+      </div>
+      <div class="field">
+        <label id="lblUnits">ژمارەی دانه له کارتۆنێکدا</label>
+        <input type="number" id="fUnits" min="0" step="1">
+      </div>
+      <div class="field">
+        <label id="lblBarcode">بارکۆد</label>
+        <input type="text" id="fBarcode">
+      </div>
+      <div class="field">
+        <label id="lblDesc">تێبینی / وردەکاری</label>
+        <textarea id="fDesc"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="cancelBtn">پاشگەزبوونەوه</button>
+        <button type="submit" class="btn btn-primary" id="saveBtn">پاشەکەوتکردن</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== Firebase SDK (compat build — plain <script> tags, no bundler needed) ===== -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ==========================================================
+     FIREBASE SETUP
+     Paste your own project's config below (see the setup guide
+     you were given alongside this file). Everything else in
+     this app talks to Firestore through the helper functions
+     right underneath this block — no other file needs editing.
+  ========================================================== */
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const productsCol = db.collection('products');
+  const categoriesDoc = db.collection('meta').doc('categories');
+
+  /* ============ Admin password gate ============
+     Strict by design: every single Add / Edit / Delete click must pass this
+     check on its own — there is intentionally NO "remember me" bypass (e.g.
+     sessionStorage) for the rest of the visit. Each action re-prompts. */
+  const ADMIN_PASSWORD = "1234Karez";
+
+  function requireAuth(actionFn){
+    const pass = prompt("Please enter the password:");
+    if(pass !== ADMIN_PASSWORD){
+      alert("پاسوۆردەکە هەڵەیە");
+      return; // block the action — do not proceed
+    }
+    actionFn();
+  }
+
+  /* ============ Broken image fallback ============ */
+  const PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="#E5E7EB"/><g fill="none" stroke="#9CA3AF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><rect x="70" y="90" width="260" height="200" rx="16"/><circle cx="150" cy="150" r="20"/><path d="M70 250l70-70 50 50 60-80 80 100"/></g></svg>`;
+  const PLACEHOLDER_IMG = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(PLACEHOLDER_SVG);
+  // Exposed on window so it can be called from inline onerror="" attributes in generated HTML
+  window.handleImgError = function(el){
+    el.onerror = null; // prevent loop if placeholder itself ever fails
+    el.src = PLACEHOLDER_IMG;
+    el.style.objectFit = 'contain';
+    el.style.padding = '14%';
+    el.style.opacity = '1';
+  };
+
+  /* ============ imgbb / ibb.co link normalizer ============
+     imgbb's own "page" links (ibb.co/xxxxx) are an HTML viewer page, not an
+     actual image file, so an <img> tag can never load them directly — only
+     the "Direct link" imgbb gives you (starting with i.ibb.co) is a real
+     image URL. This best-effort helper rewrites the common ibb.co/imgbb.com
+     link shapes onto the i.ibb.co direct-image host. It can't work miracles
+     for every possible imgbb link shape (that would need a server-side
+     fetch, which a static site can't do), so broken links still safely fall
+     back to the gray placeholder via handleImgError above. */
+  function normalizeImageUrl(url){
+    if(!url) return url;
+    const trimmed = url.trim();
+    let u;
+    try{ u = new URL(trimmed); }catch(e){ return trimmed; } // not a valid URL, leave as-is
+    const host = u.hostname.replace(/^www\./,'');
+
+    if(host === 'i.ibb.co'){
+      return trimmed; // already a direct imgbb image link
+    }
+    if(host === 'ibb.co'){
+      // https://ibb.co/abcXYZ  ->  https://i.ibb.co/abcXYZ
+      return 'https://i.ibb.co' + u.pathname + u.search;
+    }
+    if(host === 'imgbb.com' && u.pathname.startsWith('/image/')){
+      // https://imgbb.com/image/abcXYZ  ->  https://i.ibb.co/abcXYZ
+      return 'https://i.ibb.co' + u.pathname.replace('/image', '') + u.search;
+    }
+    return trimmed;
+  }
+
+  /* ============ Local (non-product) keys ============ */
+  const K_LANG = 'jwmla_lang_v1'; // language preference stays per-device; it's a display setting, not shared catalog data
+
+  /* ============ Translations ============ */
+  const T = {
+    ku: {
+      brandName:'جوملە', tabMain:'بەشی سەرەکی', tabOffers:'بەشی ئۆفەر',
+      searchPlaceholder:'گەڕان بۆ کاڵا...', menuLangText:'گۆڕینی زمان', menuAddText:'زیادکردنی کاڵا',
+      menuInfoText:'زانیاری', infoTitle:'زانیاری',
+      formTitleAdd:'زیادکردنی کاڵا', formTitleEdit:'دەستکاریکردنی کاڵا',
+      lblImage:'لینکی وێنه (URL)', imgPreviewText:'وێنه لێرە دەردەکەوێت',
+      lblName:'ناوی کاڵا', lblCategory:'جۆر / پۆل', lblSection:'شوێنی دەرکەوتن',
+      optMainText:'بەشی سەرەکی', optOffersText:'بەشی ئۆفەر',
+      lblPiece:'نرخی دانه', lblCarton:'نرخی کارتۆن', lblUnits:'ژمارەی دانه له کارتۆنێکدا',
+      lblBarcode:'بارکۆد', lblDesc:'تێبینی / وردەکاری',
+      cancelBtn:'پاشگەزبوونەوه', saveBtn:'پاشەکەوتکردن', savingBtn:'پاشەکەوتکردن...',
+      newCatPrompt:'ناوی پۆلی نوێ بنووسه', pieceLabel:'نرخی دانه', cartonLabel:'کارتۆن',
+      perCarton:'دانه/کارتۆن', confirmDelete:'دڵنیایت لە سڕینەوەی ئەم کاڵایه؟',
+      emptyText:'هیچ کاڵایەک نییه', noResults:'هیچ ئەنجامێک نەدۆزرایەوه', loadingText:'بارکردن...',
+      lblPieceD:'نرخی دانه', lblCartonD:'نرخی کارتۆن', lblUnitsD:'دانه/کارتۆن',
+      lblCatD:'جۆر', lblBarcodeD:'بارکۆد', noBarcode:'نییه', noCarton:'نییه',
+      uncategorized:'بێ پۆل', currency:'د.ع',
+      errorPrefix:'هەڵەیەک ڕوویدا: '
+    },
+    ar: {
+      brandName:'جوملە', tabMain:'الرئيسية', tabOffers:'العروض',
+      searchPlaceholder:'ابحث عن منتج...', menuLangText:'تغيير اللغة', menuAddText:'إضافة منتج',
+      menuInfoText:'زانیاری', infoTitle:'زانیاری',
+      formTitleAdd:'إضافة منتج', formTitleEdit:'تعديل المنتج',
+      lblImage:'رابط الصورة (URL)', imgPreviewText:'ستظهر الصورة هنا',
+      lblName:'اسم المنتج', lblCategory:'الفئة', lblSection:'مكان الظهور',
+      optMainText:'الرئيسية', optOffersText:'العروض',
+      lblPiece:'سعر القطعة', lblCarton:'سعر الكرتون', lblUnits:'عدد القطع في الكرتون',
+      lblBarcode:'الباركود', lblDesc:'ملاحظات / تفاصيل',
+      cancelBtn:'إلغاء', saveBtn:'حفظ', savingBtn:'جارٍ الحفظ...',
+      newCatPrompt:'اكتب اسم الفئة الجديدة', pieceLabel:'سعر القطعة', cartonLabel:'كرتون',
+      perCarton:'قطعة/كرتون', confirmDelete:'هل أنت متأكد من حذف هذا المنتج؟',
+      emptyText:'لا توجد منتجات', noResults:'لا توجد نتائج', loadingText:'جارٍ التحميل...',
+      lblPieceD:'سعر القطعة', lblCartonD:'سعر الكرتون', lblUnitsD:'قطعة/كرتون',
+      lblCatD:'الفئة', lblBarcodeD:'الباركود', noBarcode:'غير متوفر', noCarton:'غير متوفر',
+      uncategorized:'بدون فئة', currency:'د.ع',
+      errorPrefix:'حدث خطأ: '
+    }
+  };
+
+  /* ============ State ============ */
+  let lang = localStorage.getItem(K_LANG) || 'ku';
+  let currentSection = 'main';
+  let searchTerm = '';
+  let editingId = null;
+
+  let productsCache = [];
+  let productsLoaded = false;
+  let categoriesCache = [];
+
+  /* ============ Firestore: real-time listeners ============ */
+  productsCol.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+    productsCache = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    productsLoaded = true;
+    renderGrid();
+  }, (err) => {
+    console.error('Firestore products error:', err);
+    productsLoaded = true;
+    renderGrid();
+  });
+
+  categoriesDoc.onSnapshot((snap) => {
+    const data = snap.data();
+    categoriesCache = (data && Array.isArray(data.list)) ? data.list : [];
+  }, (err) => {
+    console.error('Firestore categories error:', err);
+  });
+
+  /* ============ Firestore: write helpers ============ */
+  function addProductToDb(data){
+    return productsCol.add({
+      ...data,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
+  function updateProductInDb(id, data){
+    return productsCol.doc(id).update(data);
+  }
+  function deleteProductFromDb(id){
+    return productsCol.doc(id).delete();
+  }
+  function addCategoryToDb(name){
+    return categoriesDoc.set({
+      list: firebase.firestore.FieldValue.arrayUnion(name)
+    }, { merge: true });
+  }
+
+  function fmt(n){
+    if(n === null || n === undefined || n === '') return null;
+    return Number(n).toLocaleString('en-US');
+  }
+
+  /* ============ i18n apply ============ */
+  function applyLang(){
+    const dict = T[lang];
+    document.documentElement.lang = lang === 'ku' ? 'ku' : 'ar';
+    document.documentElement.dir = 'rtl';
+    document.getElementById('brandName').textContent = dict.brandName;
+    document.getElementById('tabMain').textContent = dict.tabMain;
+    document.getElementById('tabOffers').textContent = dict.tabOffers;
+    document.getElementById('searchInput').placeholder = dict.searchPlaceholder;
+    document.getElementById('menuLangText').textContent = dict.menuLangText;
+    document.getElementById('menuInfoText').textContent = dict.menuInfoText;
+    document.getElementById('infoTitle').textContent = dict.infoTitle;
+    document.getElementById('menuAddText').textContent = dict.menuAddText;
+    document.getElementById('lblImage').innerHTML = dict.lblImage;
+    document.getElementById('imgPreview').textContent = dict.imgPreviewText;
+    document.getElementById('lblName').innerHTML = dict.lblName + ' <span class="req">*</span>';
+    document.getElementById('lblCategory').textContent = dict.lblCategory;
+    document.getElementById('lblSection').textContent = dict.lblSection;
+    document.getElementById('optMainText').textContent = dict.optMainText;
+    document.getElementById('optOffersText').textContent = dict.optOffersText;
+    document.getElementById('lblPiece').innerHTML = dict.lblPiece + ' <span class="req">*</span>';
+    document.getElementById('lblCarton').textContent = dict.lblCarton;
+    document.getElementById('lblUnits').textContent = dict.lblUnits;
+    document.getElementById('lblBarcode').textContent = dict.lblBarcode;
+    document.getElementById('lblDesc').textContent = dict.lblDesc;
+    document.getElementById('cancelBtn').textContent = dict.cancelBtn;
+    document.getElementById('saveBtn').textContent = dict.saveBtn;
+    document.getElementById('lblPieceD').textContent = dict.lblPieceD;
+    document.getElementById('lblCartonD').textContent = dict.lblCartonD;
+    document.getElementById('lblUnitsD').textContent = dict.lblUnitsD;
+    document.getElementById('lblCatD').textContent = dict.lblCatD;
+    document.getElementById('lblBarcodeD').textContent = dict.lblBarcodeD;
+    localStorage.setItem(K_LANG, lang);
+  }
+
+  /* ============ Rendering products ============ */
+  function renderCategorySelect(selectedValue){
+    const sel = document.getElementById('fCategory');
+    const dict = T[lang];
+    sel.innerHTML = '<option value="">' + dict.uncategorized + '</option>' +
+      categoriesCache.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    if(selectedValue) sel.value = selectedValue;
+  }
+
+  function escapeHtml(str){
+    if(str === undefined || str === null) return '';
+    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function renderGrid(){
+    const dict = T[lang];
+    const grid = document.getElementById('grid');
+
+    if(!productsLoaded){
+      grid.innerHTML = `<div class="empty-state"><p>${dict.loadingText}</p></div>`;
+      return;
+    }
+
+    let list = productsCache.filter(p => p.section === currentSection);
+    if(searchTerm.trim()){
+      const q = searchTerm.trim().toLowerCase();
+      list = list.filter(p => (p.name || '').toLowerCase().includes(q));
+    }
+    if(list.length === 0){
+      grid.innerHTML = `<div class="empty-state">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 21V13h6v8"/></svg>
+        <p>${searchTerm.trim() ? dict.noResults : dict.emptyText}</p>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = list.map(p => cardHtml(p, dict)).join('');
+    grid.querySelectorAll('[data-view]').forEach(el => {
+      el.addEventListener('click', () => openDetail(el.getAttribute('data-view')));
+    });
+    grid.querySelectorAll('[data-edit]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = el.getAttribute('data-edit');
+        requireAuth(() => openForm(id));
+      });
+    });
+    grid.querySelectorAll('[data-delete]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = el.getAttribute('data-delete');
+        requireAuth(() => deleteProduct(id));
+      });
+    });
+  }
+
+  function cardHtml(p, dict){
+    const cartonTxt = p.cartonPrice ? fmt(p.cartonPrice) : dict.noCarton;
+    const badge = p.units ? `<div class="card-badge">${p.units}<br>${dict.perCarton}</div>` : '';
+    const barcodeBlock = p.barcode ? `
+      <div class="barcode-wrap">
+        <div class="barcode-bars"></div>
+        <div class="barcode-num">${escapeHtml(p.barcode)}</div>
+      </div>` : '';
+    const img = p.image ? escapeHtml(p.image) : '';
+    return `
+    <div class="card">
+      <div class="card-media" data-view="${p.id}">
+        <img src="${img}" alt="${escapeHtml(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImgError(this)">
+        <div class="card-actions">
+          <button class="mini-btn edit" data-edit="${p.id}" aria-label="edit">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="mini-btn delete" data-delete="${p.id}" aria-label="delete">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+        ${badge}
+      </div>
+      <div class="card-body" data-view="${p.id}">
+        <div class="card-title">${escapeHtml(p.name)}</div>
+        <div class="price-main">${fmt(p.piecePrice)} <span class="label">${dict.pieceLabel}</span></div>
+        <div class="price-carton"><span>${dict.cartonLabel}:</span> ${cartonTxt}</div>
+        ${barcodeBlock}
+      </div>
+    </div>`;
+  }
+
+  /* ============ Detail modal (open to everyone, no password) ============ */
+  function openDetail(id){
+    const p = productsCache.find(x => x.id === id);
+    if(!p) return;
+    const dict = T[lang];
+    document.getElementById('detailImg').src = p.image || '';
+    document.getElementById('detailName').textContent = p.name;
+    document.getElementById('detailPiece').textContent = fmt(p.piecePrice) + ' ' + dict.currency;
+    document.getElementById('detailCarton').textContent = p.cartonPrice ? fmt(p.cartonPrice) + ' ' + dict.currency : dict.noCarton;
+    document.getElementById('detailUnits').textContent = p.units || dict.noCarton;
+    document.getElementById('detailCat').textContent = p.category || dict.uncategorized;
+    document.getElementById('detailBarcode').textContent = p.barcode || dict.noBarcode;
+    document.getElementById('detailDesc').textContent = p.desc || '';
+    document.getElementById('detailOverlay').classList.add('open');
+  }
+  document.getElementById('detailClose').addEventListener('click', () => {
+    document.getElementById('detailOverlay').classList.remove('open');
+  });
+  document.getElementById('detailOverlay').addEventListener('click', (e) => {
+    if(e.target.id === 'detailOverlay') document.getElementById('detailOverlay').classList.remove('open');
+  });
+
+  /* ============ Form modal (Add/Edit) — password-gated by caller ============ */
+  function openForm(id){
+    editingId = id || null;
+    const dict = T[lang];
+    document.getElementById('formTitle').textContent = editingId ? dict.formTitleEdit : dict.formTitleAdd;
+    const form = document.getElementById('productForm');
+    form.reset();
+    renderCategorySelect();
+    setSection('main');
+    document.getElementById('imgPreview').innerHTML = dict.imgPreviewText;
+
+    if(editingId){
+      const p = productsCache.find(x => x.id === editingId);
+      if(p){
+        document.getElementById('fImage').value = p.image || '';
+        document.getElementById('fName').value = p.name || '';
+        renderCategorySelect(p.category || '');
+        setSection(p.section || 'main');
+        document.getElementById('fPiece').value = p.piecePrice ?? '';
+        document.getElementById('fCarton').value = p.cartonPrice ?? '';
+        document.getElementById('fUnits').value = p.units ?? '';
+        document.getElementById('fBarcode').value = p.barcode || '';
+        document.getElementById('fDesc').value = p.desc || '';
+        updateImgPreview();
+      }
+    }
+    document.getElementById('formOverlay').classList.add('open');
+  }
+  function closeForm(){
+    document.getElementById('formOverlay').classList.remove('open');
+    editingId = null;
+  }
+  document.getElementById('formClose').addEventListener('click', closeForm);
+  document.getElementById('cancelBtn').addEventListener('click', closeForm);
+  document.getElementById('formOverlay').addEventListener('click', (e) => {
+    if(e.target.id === 'formOverlay') closeForm();
+  });
+
+  function setSection(val){
+    const main = document.getElementById('optMain');
+    const offers = document.getElementById('optOffers');
+    main.classList.toggle('selected', val === 'main');
+    offers.classList.toggle('selected', val === 'offers');
+    main.querySelector('input').checked = val === 'main';
+    offers.querySelector('input').checked = val === 'offers';
+  }
+  document.getElementById('optMain').addEventListener('click', () => setSection('main'));
+  document.getElementById('optOffers').addEventListener('click', () => setSection('offers'));
+
+  function updateImgPreview(){
+    const raw = document.getElementById('fImage').value.trim();
+    const url = normalizeImageUrl(raw);
+    const box = document.getElementById('imgPreview');
+    const dict = T[lang];
+    if(url){
+      box.innerHTML = `<img src="${escapeHtml(url)}" referrerpolicy="no-referrer" onerror="handleImgError(this)">`;
+    } else {
+      box.textContent = dict.imgPreviewText;
+    }
+  }
+  document.getElementById('fImage').addEventListener('input', updateImgPreview);
+
+  document.getElementById('addCatBtn').addEventListener('click', async () => {
+    const dict = T[lang];
+    const raw = prompt(dict.newCatPrompt);
+    const name = raw ? raw.trim() : '';
+    if(!name) return; // cancelled or empty input
+    const addCatBtn = document.getElementById('addCatBtn');
+    addCatBtn.disabled = true;
+    try{
+      await addCategoryToDb(name);
+      // Optimistically update the local cache right away instead of waiting for the
+      // realtime listener round-trip — this was the cause of the selection bug,
+      // where the dropdown was rebuilt before the new option actually existed in it.
+      if(!categoriesCache.includes(name)){
+        categoriesCache = [...categoriesCache, name];
+      }
+      renderCategorySelect(name);
+    }catch(err){
+      alert(dict.errorPrefix + err.message);
+    }finally{
+      addCatBtn.disabled = false;
+    }
+  });
+
+  document.getElementById('productForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dict = T[lang];
+    const section = document.querySelector('input[name="section"]:checked').value;
+    const data = {
+      name: document.getElementById('fName').value.trim(),
+      image: normalizeImageUrl(document.getElementById('fImage').value.trim()),
+      category: document.getElementById('fCategory').value,
+      section: section,
+      piecePrice: Number(document.getElementById('fPiece').value) || 0,
+      cartonPrice: document.getElementById('fCarton').value ? Number(document.getElementById('fCarton').value) : null,
+      units: document.getElementById('fUnits').value ? Number(document.getElementById('fUnits').value) : null,
+      barcode: document.getElementById('fBarcode').value.trim(),
+      desc: document.getElementById('fDesc').value.trim()
+    };
+
+    if(!data.name || !data.piecePrice){
+      alert(dict.errorPrefix + (lang === 'ku' ? 'ناو و نرخی دانه پێویستن' : 'الاسم وسعر القطعة مطلوبان'));
+      return;
+    }
+
+    const isEditing = !!editingId;
+    const targetId = editingId;
+    let previousEntry = null;
+    let tempId = null;
+
+    // --- 1) Optimistic UI update: reflect the change instantly, don't wait on the network ---
+    if(isEditing){
+      const idx = productsCache.findIndex(p => p.id === targetId);
+      if(idx > -1){
+        previousEntry = { ...productsCache[idx] };
+        productsCache = productsCache.map(p => p.id === targetId ? { ...p, ...data } : p);
+      }
+    } else {
+      tempId = 'temp_' + Date.now() + '_' + Math.random().toString(16).slice(2);
+      productsCache = [{ id: tempId, ...data }, ...productsCache];
+    }
+    setActiveTab(section); // switches tab if needed and re-renders the grid immediately
+    closeForm();
+
+    // --- 2) Sync to Firestore in the background; roll back only if it actually fails ---
+    const request = isEditing ? updateProductInDb(targetId, data) : addProductToDb(data);
+    request.catch((err) => {
+      if(isEditing && previousEntry){
+        productsCache = productsCache.map(p => p.id === targetId ? previousEntry : p);
+      } else if(tempId){
+        productsCache = productsCache.filter(p => p.id !== tempId);
+      }
+      renderGrid();
+      alert(dict.errorPrefix + err.message);
+    });
+  });
+
+  async function deleteProduct(id){
+    const dict = T[lang];
+    if(!confirm(dict.confirmDelete)) return;
+    try{
+      await deleteProductFromDb(id);
+    }catch(err){
+      alert(dict.errorPrefix + err.message);
+    }
+  }
+
+  /* ============ Tabs ============ */
+  function setActiveTab(section){
+    currentSection = section;
+    document.getElementById('tabMain').classList.toggle('active', section === 'main');
+    document.getElementById('tabOffers').classList.toggle('active', section === 'offers');
+    renderGrid();
+  }
+  document.getElementById('tabMain').addEventListener('click', () => setActiveTab('main'));
+  document.getElementById('tabOffers').addEventListener('click', () => setActiveTab('offers'));
+
+  /* ============ Search ============ */
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchTerm = e.target.value;
+    renderGrid();
+  });
+
+  /* ============ Dropdown menu ============ */
+  const menuBtn = document.getElementById('menuBtn');
+  const dropdown = document.getElementById('dropdown');
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if(!dropdown.contains(e.target) && e.target !== menuBtn){
+      dropdown.classList.remove('open');
+    }
+  });
+  document.getElementById('menuAdd').addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    requireAuth(() => openForm(null));
+  });
+  document.getElementById('menuLang').addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    lang = lang === 'ku' ? 'ar' : 'ku';
+    applyLang();
+    renderGrid();
+  });
+  document.getElementById('menuInfo').addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    document.getElementById('infoText').textContent =
+      'بۆ داواکردنی کاڵا یان زیاد کردنی کاڵا لە وێبسایتی جوملە پەیوەندی بەم ژمارە بکە 07508457841';
+    document.getElementById('infoOverlay').classList.add('open');
+  });
+  document.getElementById('infoClose').addEventListener('click', () => {
+    document.getElementById('infoOverlay').classList.remove('open');
+  });
+  document.getElementById('infoOverlay').addEventListener('click', (e) => {
+    if(e.target.id === 'infoOverlay') document.getElementById('infoOverlay').classList.remove('open');
+  });
+
+  /* ============ Init ============ */
+  applyLang();
+  setActiveTab('main');
+  renderGrid(); // shows the loading state immediately; onSnapshot will re-render with real data
+})();
+</script>
+</body>
+</html>
