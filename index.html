@@ -656,9 +656,27 @@
   let productsLoaded = false;
   let categoriesCache = [];
 
-  /* ============ Firestore: real-time listeners ============ */
-  productsCol.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-    productsCache = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  /* ============ Firestore: real-time listeners ============
+     IMPORTANT: we deliberately do NOT use .orderBy('createdAt', 'desc') on
+     this query. Firestore's orderBy() silently EXCLUDES any document that is
+     missing the field being ordered on — it doesn't sort it last, it drops
+     it from the results entirely. Since createdAt is written via
+     firebase.firestore.FieldValue.serverTimestamp(), it can briefly be null
+     in a client's local cache before the server acknowledges it (and any
+     document ever written without that field would be excluded forever).
+     That silent exclusion was the real cause of products "disappearing" —
+     the products were safely in Firestore, but this listener was filtering
+     some of them out of what it displayed. Listening to the whole
+     collection with no orderBy and sorting client-side afterward guarantees
+     every saved product is always loaded, every time, on every refresh. */
+  productsCol.onSnapshot((snapshot) => {
+    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    docs.sort((a, b) => {
+      const aTime = (a.createdAt && typeof a.createdAt.toMillis === 'function') ? a.createdAt.toMillis() : 0;
+      const bTime = (b.createdAt && typeof b.createdAt.toMillis === 'function') ? b.createdAt.toMillis() : 0;
+      return bTime - aTime; // newest first; items with no/pending timestamp sink to the bottom, never excluded
+    });
+    productsCache = docs;
     productsLoaded = true;
     renderGrid();
   }, (err) => {
@@ -674,7 +692,12 @@
     console.error('Firestore categories error:', err);
   });
 
-  /* ============ Firestore: write helpers ============ */
+  /* ============ Firestore: write helpers ============
+     Each of these returns the underlying Firestore promise unchanged, so
+     callers can await/`.then()`/`.catch()` it to know for certain whether
+     the write actually reached the database — a product is only ever
+     "saved" once this promise resolves; productsCache is just a temporary
+     UI mirror of whatever Firestore itself currently reports. */
   function addProductToDb(data){
     return productsCol.add({
       ...data,
@@ -844,6 +867,14 @@
 
   /* ============ Form modal (Add/Edit) — password-gated by caller ============ */
   function openForm(id){
+    if(id && String(id).indexOf('temp_') === 0){
+      // This card is a local optimistic entry still being written to Firestore —
+      // there is no real document to edit yet. Block instead of erroring out.
+      alert(lang === 'ku'
+        ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
+        : 'يرجى الانتظار، جارٍ حفظ المنتج...');
+      return;
+    }
     editingId = id || null;
     const dict = T[lang];
     document.getElementById('formTitle').textContent = editingId ? dict.formTitleEdit : dict.formTitleAdd;
@@ -982,6 +1013,12 @@
 
   async function deleteProduct(id){
     const dict = T[lang];
+    if(String(id).indexOf('temp_') === 0){
+      alert(lang === 'ku'
+        ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
+        : 'يرجى الانتظار، جارٍ حفظ المنتج...');
+      return;
+    }
     if(!confirm(dict.confirmDelete)) return;
     try{
       await deleteProductFromDb(id);
