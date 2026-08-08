@@ -303,6 +303,8 @@
   .field input[type=text],
   .field input[type=number],
   .field input[type=url],
+  .field input[type=email],
+  .field input[type=password],
   .field select,
   .field textarea{
     width:100%;
@@ -407,7 +409,15 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         <span id="menuInfoText">زانیاری</span>
       </button>
-      <button id="menuAdd">
+      <button id="menuLogin">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+        <span id="menuLoginText">چوونەژوورەوە</span>
+      </button>
+      <button id="menuLogout" style="display:none;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span id="menuLogoutText">دەرچوون</span>
+      </button>
+      <button id="menuAdd" style="display:none;">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         <span id="menuAddText">زیادکردنی کاڵا</span>
       </button>
@@ -449,6 +459,28 @@
     <button class="modal-close" id="infoClose">✕</button>
     <h2 id="infoTitle">زانیاری</h2>
     <p id="infoText" style="font-size:15px;line-height:2;color:var(--text);margin:0;"></p>
+  </div>
+</div>
+
+<!-- ===== Admin login modal ===== -->
+<div class="overlay" id="loginOverlay">
+  <div class="modal" style="max-width:380px;">
+    <button class="modal-close" id="loginClose">✕</button>
+    <h2 id="loginTitle">چوونەژوورەوەی بەڕێوەبەر</h2>
+    <form id="loginForm">
+      <div class="field">
+        <label id="lblEmail">ئیمەیل</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label id="lblPassword">وشەی نهێنی</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="loginCancelBtn">پاشگەزبوونەوه</button>
+        <button type="submit" class="btn btn-primary" id="loginSubmitBtn">چوونەژوورەوە</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -518,7 +550,8 @@
 
 <!-- ===== Firebase SDK (compat build — plain <script> tags, no bundler needed) ===== -->
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-database-compat.js"></script>
 
 <script>
 (function(){
@@ -526,13 +559,15 @@
 
   /* ==========================================================
      FIREBASE SETUP
-     Live project: jwmla-website. Everything else in this app talks to
-     Firestore through the helper functions right underneath this block —
-     no other file needs editing.
+     Live project: jwmla-website. This app now uses the Realtime Database
+     (not Firestore) plus Firebase Authentication for admin login.
+     IMPORTANT: fill in databaseURL below — see the chat explanation for
+     exactly where to find it in your Firebase console.
   ========================================================== */
   const firebaseConfig = {
     apiKey: "AIzaSyAwi7IjiTy4iSkv03hgfT5CUR6L8OkHGek",
     authDomain: "jwmla-website.firebaseapp.com",
+    databaseURL: "PASTE_YOUR_REALTIME_DATABASE_URL_HERE", // e.g. https://jwmla-website-default-rtdb.firebaseio.com
     projectId: "jwmla-website",
     storageBucket: "jwmla-website.firebasestorage.app",
     messagingSenderId: "395127164111",
@@ -540,24 +575,31 @@
   };
 
   firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const productsCol = db.collection('products');
-  const categoriesDoc = db.collection('meta').doc('categories');
+  const auth = firebase.auth();
+  const db = firebase.database();
+  const productsRef = db.ref('products');
+  const categoriesRef = db.ref('categories');
 
-  /* ============ Admin password gate ============
-     Strict by design: every single Add / Edit / Delete click must pass this
-     check on its own — there is intentionally NO "remember me" bypass (e.g.
-     sessionStorage) for the rest of the visit. Each action re-prompts. */
-  const ADMIN_PASSWORD = "1234Karez";
+  /* ============ Admin auth state ============
+     Real Firebase Authentication replaces the old shared-password prompt.
+     isAdmin reflects whether a Firebase user is currently signed in; the
+     UI (Add Product menu item, Edit/Delete icons) only appears for them,
+     and — critically — the Realtime Database security rules (see the chat
+     explanation) enforce the same restriction server-side, so hiding these
+     buttons is a UX nicety, not the actual security boundary. */
+  let isAdmin = false;
 
-  function requireAuth(actionFn){
-    const pass = prompt("Please enter the password:");
-    if(pass !== ADMIN_PASSWORD){
-      alert("پاسوۆردەکە هەڵەیە");
-      return; // block the action — do not proceed
-    }
-    actionFn();
+  function updateAuthUI(){
+    document.getElementById('menuAdd').style.display = isAdmin ? 'flex' : 'none';
+    document.getElementById('menuLogin').style.display = isAdmin ? 'none' : 'flex';
+    document.getElementById('menuLogout').style.display = isAdmin ? 'flex' : 'none';
   }
+
+  auth.onAuthStateChanged((user) => {
+    isAdmin = !!user;
+    updateAuthUI();
+    renderGrid(); // re-render cards so edit/delete icons appear or disappear
+  });
 
   /* ============ Broken image fallback ============ */
   const PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="#E5E7EB"/><g fill="none" stroke="#9CA3AF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><rect x="70" y="90" width="260" height="200" rx="16"/><circle cx="150" cy="150" r="20"/><path d="M70 250l70-70 50 50 60-80 80 100"/></g></svg>`;
@@ -623,6 +665,9 @@
       lblPieceD:'نرخی دانه', lblCartonD:'نرخی کارتۆن', lblUnitsD:'دانه/کارتۆن',
       lblCatD:'جۆر', lblBarcodeD:'بارکۆد', noBarcode:'نییه', noCarton:'نییه',
       uncategorized:'بێ پۆل', currency:'د.ع',
+      menuLoginText:'چوونەژوورەوە', menuLogoutText:'دەرچوون', loginTitle:'چوونەژوورەوەی بەڕێوەبەر',
+      lblEmail:'ئیمەیل', lblPassword:'وشەی نهێنی', loginSubmitBtn:'چوونەژوورەوە',
+      loginError:'ئیمەیل یان وشەی نهێنی هەڵەیه', pleaseLogin:'تکایە سەرەتا بچووە ژوورەوە',
       errorPrefix:'هەڵەیەک ڕوویدا: '
     },
     ar: {
@@ -642,6 +687,9 @@
       lblPieceD:'سعر القطعة', lblCartonD:'سعر الكرتون', lblUnitsD:'قطعة/كرتون',
       lblCatD:'الفئة', lblBarcodeD:'الباركود', noBarcode:'غير متوفر', noCarton:'غير متوفر',
       uncategorized:'بدون فئة', currency:'د.ع',
+      menuLoginText:'تسجيل الدخول', menuLogoutText:'تسجيل الخروج', loginTitle:'دخول المسؤول',
+      lblEmail:'البريد الإلكتروني', lblPassword:'كلمة المرور', loginSubmitBtn:'تسجيل الدخول',
+      loginError:'البريد الإلكتروني أو كلمة المرور غير صحيحة', pleaseLogin:'يرجى تسجيل الدخول أولاً',
       errorPrefix:'حدث خطأ: '
     }
   };
@@ -656,64 +704,58 @@
   let productsLoaded = false;
   let categoriesCache = [];
 
-  /* ============ Firestore: real-time listeners ============
-     IMPORTANT: we deliberately do NOT use .orderBy('createdAt', 'desc') on
-     this query. Firestore's orderBy() silently EXCLUDES any document that is
-     missing the field being ordered on — it doesn't sort it last, it drops
-     it from the results entirely. Since createdAt is written via
-     firebase.firestore.FieldValue.serverTimestamp(), it can briefly be null
-     in a client's local cache before the server acknowledges it (and any
-     document ever written without that field would be excluded forever).
-     That silent exclusion was the real cause of products "disappearing" —
-     the products were safely in Firestore, but this listener was filtering
-     some of them out of what it displayed. Listening to the whole
-     collection with no orderBy and sorting client-side afterward guarantees
-     every saved product is always loaded, every time, on every refresh. */
-  productsCol.onSnapshot((snapshot) => {
-    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    docs.sort((a, b) => {
-      const aTime = (a.createdAt && typeof a.createdAt.toMillis === 'function') ? a.createdAt.toMillis() : 0;
-      const bTime = (b.createdAt && typeof b.createdAt.toMillis === 'function') ? b.createdAt.toMillis() : 0;
-      return bTime - aTime; // newest first; items with no/pending timestamp sink to the bottom, never excluded
-    });
+  /* ============ Realtime Database: live listeners ============
+     Realtime Database's .on('value', ...) fires immediately with whatever
+     is currently stored, then again on every future change — this is how
+     "products load automatically on refresh" and "updates propagate live"
+     both happen. Unlike Firestore's orderBy(), RTDB never silently excludes
+     a node for missing a field, but we still sort client-side to keep
+     control over ordering and to gracefully handle any node that predates
+     the createdAt field. */
+  productsRef.on('value', (snapshot) => {
+    const val = snapshot.val() || {};
+    const docs = Object.keys(val).map(key => ({ id: key, ...val[key] }));
+    docs.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
     productsCache = docs;
     productsLoaded = true;
     renderGrid();
   }, (err) => {
-    console.error('Firestore products error:', err);
+    console.error('Realtime Database products error:', err);
     productsLoaded = true;
     renderGrid();
   });
 
-  categoriesDoc.onSnapshot((snap) => {
-    const data = snap.data();
-    categoriesCache = (data && Array.isArray(data.list)) ? data.list : [];
+  categoriesRef.on('value', (snapshot) => {
+    const val = snapshot.val() || {};
+    categoriesCache = Object.values(val);
   }, (err) => {
-    console.error('Firestore categories error:', err);
+    console.error('Realtime Database categories error:', err);
   });
 
-  /* ============ Firestore: write helpers ============
-     Each of these returns the underlying Firestore promise unchanged, so
-     callers can await/`.then()`/`.catch()` it to know for certain whether
-     the write actually reached the database — a product is only ever
-     "saved" once this promise resolves; productsCache is just a temporary
-     UI mirror of whatever Firestore itself currently reports. */
+  /* ============ Realtime Database: write helpers ============
+     Each of these returns the underlying Realtime Database promise
+     unchanged, so callers can await/.then()/.catch() it to know for
+     certain whether the write actually reached the database — a product
+     is only ever "saved" once this promise resolves; productsCache is
+     just a temporary UI mirror of whatever the database itself
+     currently reports. push() generates a safe, unique key automatically. */
   function addProductToDb(data){
-    return productsCol.add({
+    return productsRef.push({
       ...data,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      createdAt: firebase.database.ServerValue.TIMESTAMP
     });
   }
   function updateProductInDb(id, data){
-    return productsCol.doc(id).update(data);
+    return productsRef.child(id).update(data);
   }
   function deleteProductFromDb(id){
-    return productsCol.doc(id).delete();
+    return productsRef.child(id).remove();
   }
   function addCategoryToDb(name){
-    return categoriesDoc.set({
-      list: firebase.firestore.FieldValue.arrayUnion(name)
-    }, { merge: true });
+    // Realtime Database keys can't contain . # $ [ ] / — sanitize the
+    // category name into a safe key while keeping the real name as the value.
+    const safeKey = name.replace(/[.#$\[\]/]/g, '_');
+    return categoriesRef.child(safeKey).set(name);
   }
 
   function fmt(n){
@@ -733,6 +775,12 @@
     document.getElementById('menuLangText').textContent = dict.menuLangText;
     document.getElementById('menuInfoText').textContent = dict.menuInfoText;
     document.getElementById('infoTitle').textContent = dict.infoTitle;
+    document.getElementById('menuLoginText').textContent = dict.menuLoginText;
+    document.getElementById('menuLogoutText').textContent = dict.menuLogoutText;
+    document.getElementById('loginTitle').textContent = dict.loginTitle;
+    document.getElementById('lblEmail').textContent = dict.lblEmail;
+    document.getElementById('lblPassword').textContent = dict.lblPassword;
+    document.getElementById('loginSubmitBtn').textContent = dict.loginSubmitBtn;
     document.getElementById('menuAddText').textContent = dict.menuAddText;
     document.getElementById('lblImage').innerHTML = dict.lblImage;
     document.getElementById('imgPreview').textContent = dict.imgPreviewText;
@@ -747,6 +795,7 @@
     document.getElementById('lblBarcode').textContent = dict.lblBarcode;
     document.getElementById('lblDesc').textContent = dict.lblDesc;
     document.getElementById('cancelBtn').textContent = dict.cancelBtn;
+    document.getElementById('loginCancelBtn').textContent = dict.cancelBtn;
     document.getElementById('saveBtn').textContent = dict.saveBtn;
     document.getElementById('lblPieceD').textContent = dict.lblPieceD;
     document.getElementById('lblCartonD').textContent = dict.lblCartonD;
@@ -798,15 +847,13 @@
     grid.querySelectorAll('[data-edit]').forEach(el => {
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = el.getAttribute('data-edit');
-        requireAuth(() => openForm(id));
+        openForm(el.getAttribute('data-edit'));
       });
     });
     grid.querySelectorAll('[data-delete]').forEach(el => {
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = el.getAttribute('data-delete');
-        requireAuth(() => deleteProduct(id));
+        deleteProduct(el.getAttribute('data-delete'));
       });
     });
   }
@@ -820,10 +867,7 @@
         <div class="barcode-num">${escapeHtml(p.barcode)}</div>
       </div>` : '';
     const img = p.image ? escapeHtml(p.image) : '';
-    return `
-    <div class="card">
-      <div class="card-media" data-view="${p.id}">
-        <img src="${img}" alt="${escapeHtml(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImgError(this)">
+    const actionsBlock = isAdmin ? `
         <div class="card-actions">
           <button class="mini-btn edit" data-edit="${p.id}" aria-label="edit">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -831,7 +875,12 @@
           <button class="mini-btn delete" data-delete="${p.id}" aria-label="delete">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
           </button>
-        </div>
+        </div>` : '';
+    return `
+    <div class="card">
+      <div class="card-media" data-view="${p.id}">
+        <img src="${img}" alt="${escapeHtml(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImgError(this)">
+        ${actionsBlock}
         ${badge}
       </div>
       <div class="card-body" data-view="${p.id}">
@@ -865,10 +914,16 @@
     if(e.target.id === 'detailOverlay') document.getElementById('detailOverlay').classList.remove('open');
   });
 
-  /* ============ Form modal (Add/Edit) — password-gated by caller ============ */
+  /* ============ Form modal (Add/Edit) — admin-only ============ */
   function openForm(id){
+    if(!isAdmin){
+      // Defense-in-depth: the button that calls this is hidden for non-admins,
+      // but this check stops the modal from opening even if triggered another way.
+      alert(T[lang].pleaseLogin);
+      return;
+    }
     if(id && String(id).indexOf('temp_') === 0){
-      // This card is a local optimistic entry still being written to Firestore —
+      // This card is a local optimistic entry still being written to the database —
       // there is no real document to edit yet. Block instead of erroring out.
       alert(lang === 'ku'
         ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
@@ -961,6 +1016,10 @@
   document.getElementById('productForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const dict = T[lang];
+    if(!isAdmin){
+      alert(dict.pleaseLogin);
+      return;
+    }
     const section = document.querySelector('input[name="section"]:checked').value;
     const data = {
       name: document.getElementById('fName').value.trim(),
@@ -998,7 +1057,7 @@
     setActiveTab(section); // switches tab if needed and re-renders the grid immediately
     closeForm();
 
-    // --- 2) Sync to Firestore in the background; roll back only if it actually fails ---
+    // --- 2) Sync to the database in the background; roll back only if it actually fails ---
     const request = isEditing ? updateProductInDb(targetId, data) : addProductToDb(data);
     request.catch((err) => {
       if(isEditing && previousEntry){
@@ -1013,6 +1072,10 @@
 
   async function deleteProduct(id){
     const dict = T[lang];
+    if(!isAdmin){
+      alert(dict.pleaseLogin);
+      return;
+    }
     if(String(id).indexOf('temp_') === 0){
       alert(lang === 'ku'
         ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
@@ -1057,7 +1120,7 @@
   });
   document.getElementById('menuAdd').addEventListener('click', () => {
     dropdown.classList.remove('open');
-    requireAuth(() => openForm(null));
+    openForm(null);
   });
   document.getElementById('menuLang').addEventListener('click', () => {
     dropdown.classList.remove('open');
@@ -1078,10 +1141,48 @@
     if(e.target.id === 'infoOverlay') document.getElementById('infoOverlay').classList.remove('open');
   });
 
+  /* ============ Admin login / logout ============ */
+  function closeLoginModal(){
+    document.getElementById('loginOverlay').classList.remove('open');
+    document.getElementById('loginForm').reset();
+  }
+  document.getElementById('menuLogin').addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    document.getElementById('loginOverlay').classList.add('open');
+  });
+  document.getElementById('menuLogout').addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    auth.signOut();
+  });
+  document.getElementById('loginClose').addEventListener('click', closeLoginModal);
+  document.getElementById('loginCancelBtn').addEventListener('click', closeLoginModal);
+  document.getElementById('loginOverlay').addEventListener('click', (e) => {
+    if(e.target.id === 'loginOverlay') closeLoginModal();
+  });
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dict = T[lang];
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginSubmitBtn');
+    btn.disabled = true;
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        closeLoginModal(); // onAuthStateChanged fires automatically and updates the UI
+      })
+      .catch((err) => {
+        console.error('Login error:', err);
+        alert(dict.loginError);
+      })
+      .finally(() => {
+        btn.disabled = false;
+      });
+  });
+
   /* ============ Init ============ */
   applyLang();
   setActiveTab('main');
-  renderGrid(); // shows the loading state immediately; onSnapshot will re-render with real data
+  renderGrid(); // shows the loading state immediately; the Realtime Database listener re-renders with real data
 })();
 </script>
 </body>
