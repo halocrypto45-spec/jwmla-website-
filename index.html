@@ -442,7 +442,7 @@
 <div class="overlay" id="detailOverlay">
   <div class="modal">
     <button class="modal-close" id="detailClose">✕</button>
-    <div class="detail-img"><img id="detailImg" src="" alt="" referrerpolicy="no-referrer" onerror="handleImgError(this)"></div>
+    <div class="detail-img"><img id="detailImg" src="" alt="" referrerpolicy="no-referrer"></div>
     <h2 id="detailName" style="padding-left:0;"></h2>
     <div class="detail-row"><span id="lblPieceD">نرخی دانه</span><span id="detailPiece"></span></div>
     <div class="detail-row"><span id="lblCartonD">نرخی کارتۆن</span><span id="detailCarton"></span></div>
@@ -557,51 +557,7 @@
 (function(){
   "use strict";
 
-  /* ==========================================================
-     FIREBASE SETUP
-     Live project: jwmla-website. This app now uses the Realtime Database
-     (not Firestore) plus Firebase Authentication for admin login.
-     IMPORTANT: fill in databaseURL below — see the chat explanation for
-     exactly where to find it in your Firebase console.
-  ========================================================== */
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwi7IjiTy4iSkv03hgfT5CUR6L8OkHGek",
-    authDomain: "jwmla-website.firebaseapp.com",
-    databaseURL: "PASTE_YOUR_REALTIME_DATABASE_URL_HERE", // e.g. https://jwmla-website-default-rtdb.firebaseio.com
-    projectId: "jwmla-website",
-    storageBucket: "jwmla-website.firebasestorage.app",
-    messagingSenderId: "395127164111",
-    appId: "1:395127164111:web:0c6431809f28ca8591bbba"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-  const productsRef = db.ref('products');
-  const categoriesRef = db.ref('categories');
-
-  /* ============ Admin auth state ============
-     Real Firebase Authentication replaces the old shared-password prompt.
-     isAdmin reflects whether a Firebase user is currently signed in; the
-     UI (Add Product menu item, Edit/Delete icons) only appears for them,
-     and — critically — the Realtime Database security rules (see the chat
-     explanation) enforce the same restriction server-side, so hiding these
-     buttons is a UX nicety, not the actual security boundary. */
-  let isAdmin = false;
-
-  function updateAuthUI(){
-    document.getElementById('menuAdd').style.display = isAdmin ? 'flex' : 'none';
-    document.getElementById('menuLogin').style.display = isAdmin ? 'none' : 'flex';
-    document.getElementById('menuLogout').style.display = isAdmin ? 'flex' : 'none';
-  }
-
-  auth.onAuthStateChanged((user) => {
-    isAdmin = !!user;
-    updateAuthUI();
-    renderGrid(); // re-render cards so edit/delete icons appear or disappear
-  });
-
-  /* ============ Broken image fallback ============ */
+  /* ============ Broken image fallback (no dependencies — safe to define first) ============ */
   const PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="#E5E7EB"/><g fill="none" stroke="#9CA3AF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><rect x="70" y="90" width="260" height="200" rx="16"/><circle cx="150" cy="150" r="20"/><path d="M70 250l70-70 50 50 60-80 80 100"/></g></svg>`;
   const PLACEHOLDER_IMG = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(PLACEHOLDER_SVG);
   // Exposed on window so it can be called from inline onerror="" attributes in generated HTML
@@ -668,6 +624,8 @@
       menuLoginText:'چوونەژوورەوە', menuLogoutText:'دەرچوون', loginTitle:'چوونەژوورەوەی بەڕێوەبەر',
       lblEmail:'ئیمەیل', lblPassword:'وشەی نهێنی', loginSubmitBtn:'چوونەژوورەوە',
       loginError:'ئیمەیل یان وشەی نهێنی هەڵەیه', pleaseLogin:'تکایە سەرەتا بچووە ژوورەوە',
+      notConnected:'پەیوەندی بە داتابەیسەوە نییه. تکایە پەیجەکە نوێ بکەرەوە.',
+      dbError:'کێشەیەک لە پەیوەندیکردن بە داتابەیس ڕوویدا. تکایە دواتر هەوڵ بدەرەوە.',
       errorPrefix:'هەڵەیەک ڕوویدا: '
     },
     ar: {
@@ -690,11 +648,16 @@
       menuLoginText:'تسجيل الدخول', menuLogoutText:'تسجيل الخروج', loginTitle:'دخول المسؤول',
       lblEmail:'البريد الإلكتروني', lblPassword:'كلمة المرور', loginSubmitBtn:'تسجيل الدخول',
       loginError:'البريد الإلكتروني أو كلمة المرور غير صحيحة', pleaseLogin:'يرجى تسجيل الدخول أولاً',
+      notConnected:'لا يوجد اتصال بقاعدة البيانات. يرجى تحديث الصفحة.',
+      dbError:'حدث خطأ في الاتصال بقاعدة البيانات. يرجى المحاولة لاحقاً.',
       errorPrefix:'حدث خطأ: '
     }
   };
 
-  /* ============ State ============ */
+  /* ============ State ============
+     Every one of these is defined before any Firebase code runs, on purpose:
+     if Firebase ever fails to load (network hiccup, ad-blocker, bad config),
+     nothing here breaks, and the functions below it keep working normally. */
   let lang = localStorage.getItem(K_LANG) || 'ku';
   let currentSection = 'main';
   let searchTerm = '';
@@ -704,59 +667,9 @@
   let productsLoaded = false;
   let categoriesCache = [];
 
-  /* ============ Realtime Database: live listeners ============
-     Realtime Database's .on('value', ...) fires immediately with whatever
-     is currently stored, then again on every future change — this is how
-     "products load automatically on refresh" and "updates propagate live"
-     both happen. Unlike Firestore's orderBy(), RTDB never silently excludes
-     a node for missing a field, but we still sort client-side to keep
-     control over ordering and to gracefully handle any node that predates
-     the createdAt field. */
-  productsRef.on('value', (snapshot) => {
-    const val = snapshot.val() || {};
-    const docs = Object.keys(val).map(key => ({ id: key, ...val[key] }));
-    docs.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
-    productsCache = docs;
-    productsLoaded = true;
-    renderGrid();
-  }, (err) => {
-    console.error('Realtime Database products error:', err);
-    productsLoaded = true;
-    renderGrid();
-  });
-
-  categoriesRef.on('value', (snapshot) => {
-    const val = snapshot.val() || {};
-    categoriesCache = Object.values(val);
-  }, (err) => {
-    console.error('Realtime Database categories error:', err);
-  });
-
-  /* ============ Realtime Database: write helpers ============
-     Each of these returns the underlying Realtime Database promise
-     unchanged, so callers can await/.then()/.catch() it to know for
-     certain whether the write actually reached the database — a product
-     is only ever "saved" once this promise resolves; productsCache is
-     just a temporary UI mirror of whatever the database itself
-     currently reports. push() generates a safe, unique key automatically. */
-  function addProductToDb(data){
-    return productsRef.push({
-      ...data,
-      createdAt: firebase.database.ServerValue.TIMESTAMP
-    });
-  }
-  function updateProductInDb(id, data){
-    return productsRef.child(id).update(data);
-  }
-  function deleteProductFromDb(id){
-    return productsRef.child(id).remove();
-  }
-  function addCategoryToDb(name){
-    // Realtime Database keys can't contain . # $ [ ] / — sanitize the
-    // category name into a safe key while keeping the real name as the value.
-    const safeKey = name.replace(/[.#$\[\]/]/g, '_');
-    return categoriesRef.child(safeKey).set(name);
-  }
+  let isAdmin = false;
+  let firebaseReady = false; // becomes true only once Firebase has actually initialized successfully
+  let auth = null, db = null, productsRef = null, categoriesRef = null;
 
   function fmt(n){
     if(n === null || n === undefined || n === '') return null;
@@ -822,6 +735,13 @@
   function renderGrid(){
     const dict = T[lang];
     const grid = document.getElementById('grid');
+
+    if(!firebaseReady && productsLoaded){
+      // Firebase failed to initialize (see the try/catch further down) — tell the
+      // person plainly instead of leaving them staring at an empty grid forever.
+      grid.innerHTML = `<div class="empty-state"><p>${dict.dbError}</p></div>`;
+      return;
+    }
 
     if(!productsLoaded){
       grid.innerHTML = `<div class="empty-state"><p>${dict.loadingText}</p></div>`;
@@ -892,12 +812,14 @@
     </div>`;
   }
 
-  /* ============ Detail modal (open to everyone, no password) ============ */
+  /* ============ Detail modal (open to everyone) ============ */
   function openDetail(id){
     const p = productsCache.find(x => x.id === id);
     if(!p) return;
     const dict = T[lang];
-    document.getElementById('detailImg').src = p.image || '';
+    const detailImgEl = document.getElementById('detailImg');
+    detailImgEl.onerror = () => handleImgError(detailImgEl);
+    detailImgEl.src = p.image || '';
     document.getElementById('detailName').textContent = p.name;
     document.getElementById('detailPiece').textContent = fmt(p.piecePrice) + ' ' + dict.currency;
     document.getElementById('detailCarton').textContent = p.cartonPrice ? fmt(p.cartonPrice) + ' ' + dict.currency : dict.noCarton;
@@ -992,6 +914,7 @@
 
   document.getElementById('addCatBtn').addEventListener('click', async () => {
     const dict = T[lang];
+    if(!firebaseReady){ alert(dict.notConnected); return; }
     const raw = prompt(dict.newCatPrompt);
     const name = raw ? raw.trim() : '';
     if(!name) return; // cancelled or empty input
@@ -1018,6 +941,10 @@
     const dict = T[lang];
     if(!isAdmin){
       alert(dict.pleaseLogin);
+      return;
+    }
+    if(!firebaseReady){
+      alert(dict.notConnected);
       return;
     }
     const section = document.querySelector('input[name="section"]:checked').value;
@@ -1076,6 +1003,10 @@
       alert(dict.pleaseLogin);
       return;
     }
+    if(!firebaseReady){
+      alert(dict.notConnected);
+      return;
+    }
     if(String(id).indexOf('temp_') === 0){
       alert(lang === 'ku'
         ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
@@ -1106,7 +1037,10 @@
     renderGrid();
   });
 
-  /* ============ Dropdown menu ============ */
+  /* ============ Dropdown menu ============
+     stopPropagation() on the button's own click keeps this same click from
+     also reaching the document-level listener below, so opening the menu
+     can never immediately close itself again. */
   const menuBtn = document.getElementById('menuBtn');
   const dropdown = document.getElementById('dropdown');
   menuBtn.addEventListener('click', (e) => {
@@ -1141,6 +1075,13 @@
     if(e.target.id === 'infoOverlay') document.getElementById('infoOverlay').classList.remove('open');
   });
 
+  /* ============ Admin auth UI (pure DOM toggling — no Firebase dependency itself) ============ */
+  function updateAuthUI(){
+    document.getElementById('menuAdd').style.display = isAdmin ? 'flex' : 'none';
+    document.getElementById('menuLogin').style.display = isAdmin ? 'none' : 'flex';
+    document.getElementById('menuLogout').style.display = isAdmin ? 'flex' : 'none';
+  }
+
   /* ============ Admin login / logout ============ */
   function closeLoginModal(){
     document.getElementById('loginOverlay').classList.remove('open');
@@ -1152,6 +1093,7 @@
   });
   document.getElementById('menuLogout').addEventListener('click', () => {
     dropdown.classList.remove('open');
+    if(!firebaseReady){ alert(T[lang].notConnected); return; }
     auth.signOut();
   });
   document.getElementById('loginClose').addEventListener('click', closeLoginModal);
@@ -1162,6 +1104,7 @@
   document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const dict = T[lang];
+    if(!firebaseReady){ alert(dict.notConnected); return; }
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     const btn = document.getElementById('loginSubmitBtn');
@@ -1178,6 +1121,98 @@
         btn.disabled = false;
       });
   });
+
+  /* ==========================================================
+     FIREBASE SETUP — Realtime Database + Authentication
+     Live project: jwmla-website.
+     Everything above this point is pure UI and works completely on its
+     own, regardless of whether Firebase successfully connects — that
+     separation is intentional: if this block ever throws (bad config,
+     network blocked, CDN unreachable), it's caught below and the rest of
+     the site (menu, tabs, search, modals) keeps working normally instead
+     of the single error taking down every feature on the page at once.
+  ========================================================== */
+  const firebaseConfig = {
+    apiKey: "AIzaSyAwi7IjiTy4iSkv03hgfT5CUR6L8OkHGek",
+    authDomain: "jwmla-website.firebaseapp.com",
+    databaseURL: "https://jwmla-website-default-rtdb.firebaseio.com",
+    projectId: "jwmla-website",
+    storageBucket: "jwmla-website.firebasestorage.app",
+    messagingSenderId: "395127164111",
+    appId: "1:395127164111:web:0c6431809f28ca8591bbba"
+  };
+
+  try{
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.database();
+    productsRef = db.ref('products');
+    categoriesRef = db.ref('categories');
+    firebaseReady = true;
+
+    auth.onAuthStateChanged((user) => {
+      isAdmin = !!user;
+      updateAuthUI();
+      renderGrid(); // re-render cards so edit/delete icons appear or disappear
+    });
+
+    /* Realtime Database's .on('value', ...) fires immediately with whatever
+       is currently stored, then again on every future change — this is how
+       "products load automatically on refresh" and "updates propagate live"
+       both happen. Unlike Firestore's orderBy(), RTDB never silently
+       excludes a node for missing a field, but we still sort client-side to
+       keep control over ordering and gracefully handle legacy nodes. */
+    productsRef.on('value', (snapshot) => {
+      const val = snapshot.val() || {};
+      const docs = Object.keys(val).map(key => ({ id: key, ...val[key] }));
+      docs.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
+      productsCache = docs;
+      productsLoaded = true;
+      renderGrid();
+    }, (err) => {
+      console.error('Realtime Database products error:', err);
+      productsLoaded = true;
+      renderGrid();
+    });
+
+    categoriesRef.on('value', (snapshot) => {
+      const val = snapshot.val() || {};
+      categoriesCache = Object.values(val);
+    }, (err) => {
+      console.error('Realtime Database categories error:', err);
+    });
+  }catch(err){
+    console.error('Firebase failed to initialize:', err);
+    firebaseReady = false;
+    productsLoaded = true; // stop showing "loading" forever
+    renderGrid(); // shows the dbError message via the firebaseReady check above
+  }
+
+  /* ============ Realtime Database: write helpers ============
+     Each of these returns the underlying Realtime Database promise
+     unchanged, so callers can await/.then()/.catch() it to know for
+     certain whether the write actually reached the database — a product
+     is only ever "saved" once this promise resolves; productsCache is
+     just a temporary UI mirror of whatever the database itself currently
+     reports. push() generates a safe, unique key automatically. */
+  function addProductToDb(data){
+    return productsRef.push({
+      ...data,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
+  }
+  function updateProductInDb(id, data){
+    return productsRef.child(id).update(data);
+  }
+  function deleteProductFromDb(id){
+    return productsRef.child(id).remove();
+  }
+  function addCategoryToDb(name){
+    // Realtime Database keys can't contain . # $ [ ] / — sanitize the
+    // category name into a safe key while keeping the real name as the value.
+    const safeKey = name.replace(/[.#$\[\]/]/g, '_');
+    return categoriesRef.child(safeKey).set(name);
+  }
 
   /* ============ Init ============ */
   applyLang();
