@@ -3,398 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>جوملە | jwmla</title>
+<title>کۆگا | Koga</title>
 <meta name="theme-color" content="#7C3AED">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --purple:#7C3AED;
-    --purple-dark:#6423C6;
-    --purple-light:#F3EBFF;
-    --purple-border:#E4D4FB;
-    --green:#16A34A;
-    --green-dark:#0F7A38;
-    --text:#1F1330;
-    --muted:#8A7B9E;
-    --bg:#FBFAFD;
-    --danger:#EF4444;
-    --radius:18px;
-    --shadow:0 4px 18px rgba(124,58,237,0.10);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    font-family:'Noto Kufi Arabic', 'Segoe UI', sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:40px;
-  }
-  button{font-family:inherit; cursor:pointer;}
-  input,select,textarea{font-family:inherit;}
-  a{color:inherit;text-decoration:none;}
-  img{max-width:100%;display:block;}
-
-  /* ===== Header ===== */
-  .topbar{
-    background:linear-gradient(135deg,var(--purple),var(--purple-dark));
-    padding:16px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    position:sticky;
-    top:0;
-    z-index:40;
-    box-shadow:0 2px 14px rgba(100,35,198,0.25);
-  }
-  .phone-pill{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    background:linear-gradient(135deg,var(--green),var(--green-dark));
-    border:1px solid rgba(255,255,255,0.35);
-    padding:8px 14px;
-    border-radius:999px;
-    color:#fff;
-    font-weight:600;
-    font-size:15px;
-    white-space:nowrap;
-    box-shadow:0 2px 8px rgba(15,122,56,0.35);
-  }
-  .phone-pill svg{flex-shrink:0;}
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    color:#fff;
-  }
-  .brand-icon{
-    width:38px;height:38px;
-    background:rgba(255,255,255,0.18);
-    border:1px solid rgba(255,255,255,0.35);
-    border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .brand-name{font-size:22px;font-weight:800;letter-spacing:.3px;}
-
-  /* ===== Subheader (menu / search) ===== */
-  .subbar{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:14px 16px 6px;
-    max-width:1100px;
-    margin:0 auto;
-  }
-  .menu-wrap{position:relative;flex-shrink:0;}
-  .icon-btn{
-    width:44px;height:44px;
-    border-radius:12px;
-    border:1px solid var(--purple-border);
-    background:#fff;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--purple);
-    box-shadow:var(--shadow);
-  }
-  .icon-btn:active{transform:scale(0.95);}
-  .dropdown{
-    position:absolute;
-    top:52px;
-    right:0;
-    background:#fff;
-    border:1px solid var(--purple-border);
-    border-radius:14px;
-    box-shadow:0 10px 30px rgba(100,35,198,0.18);
-    min-width:190px;
-    padding:8px;
-    display:none;
-    z-index:60;
-  }
-  .dropdown.open{display:block;}
-  .dropdown button{
-    width:100%;
-    text-align:right;
-    background:none;
-    border:none;
-    padding:12px 14px;
-    border-radius:10px;
-    font-size:15px;
-    font-weight:600;
-    color:var(--text);
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .dropdown button:hover{background:var(--purple-light);color:var(--purple-dark);}
-
-  .search-wrap{
-    flex:1;
-    position:relative;
-  }
-  .search-wrap input{
-    width:100%;
-    padding:12px 44px 12px 14px;
-    border-radius:12px;
-    border:1px solid var(--purple-border);
-    background:#fff;
-    font-size:15px;
-    outline:none;
-    box-shadow:var(--shadow);
-  }
-  .search-wrap input:focus{border-color:var(--purple);}
-  .search-wrap svg{
-    position:absolute;
-    top:50%;right:14px;
-    transform:translateY(-50%);
-    color:var(--muted);
-    pointer-events:none;
-  }
-
-  /* ===== Tabs ===== */
-  .tabs{
-    max-width:1100px;
-    margin:10px auto 0;
-    padding:0 16px;
-    display:flex;
-    gap:8px;
-  }
-  .tab-btn{
-    flex:1;
-    padding:12px 10px;
-    border-radius:12px;
-    border:1px solid var(--purple-border);
-    background:#fff;
-    color:var(--purple-dark);
-    font-weight:700;
-    font-size:15px;
-  }
-  .tab-btn.active{
-    background:var(--purple);
-    color:#fff;
-    border-color:var(--purple);
-  }
-
-  /* ===== Grid ===== */
-  .grid{
-    max-width:1100px;
-    margin:0 auto;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-    padding:16px;
-  }
-  @media (min-width:600px){ .grid{grid-template-columns:repeat(3,1fr);} }
-  @media (min-width:900px){ .grid{grid-template-columns:repeat(4,1fr);} }
-
-  .card{
-    background:#fff;
-    border:1px solid var(--purple-border);
-    border-radius:var(--radius);
-    overflow:hidden;
-    box-shadow:var(--shadow);
-    display:flex;
-    flex-direction:column;
-  }
-  .card-media{
-    position:relative;
-    height:200px;
-    background:var(--purple-light);
-    cursor:pointer;
-  }
-  .card-media img{width:100%;height:200px;object-fit:cover;display:block;}
-  .card-actions{
-    position:absolute;
-    top:8px;right:8px;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    z-index:5;
-  }
-  .mini-btn{
-    width:34px;height:34px;
-    border-radius:999px;
-    border:none;
-    background:rgba(255,255,255,0.92);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 2px 8px rgba(0,0,0,0.15);
-  }
-  .mini-btn.edit{color:var(--purple);}
-  .mini-btn.delete{color:var(--danger);}
-  .card-badge{
-    position:absolute;
-    bottom:8px;right:8px;
-    background:var(--purple);
-    color:#fff;
-    font-weight:700;
-    font-size:12px;
-    line-height:1.3;
-    text-align:center;
-    padding:6px 10px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(100,35,198,0.35);
-  }
-  .card-body{padding:12px 14px 14px;flex:1;display:flex;flex-direction:column;gap:4px;}
-  .card-title{font-size:16px;font-weight:700;color:var(--text);min-height:22px;}
-  .price-main{font-size:22px;font-weight:800;color:var(--purple-dark);display:flex;align-items:baseline;gap:6px;}
-  .price-main span.label{font-size:12px;font-weight:600;color:var(--muted);}
-  .price-carton{font-size:13px;font-weight:700;color:var(--text);}
-  .price-carton span{color:var(--muted);font-weight:600;}
-  .barcode-wrap{margin-top:6px;}
-  .barcode-bars{
-    height:26px;
-    background:repeating-linear-gradient(90deg,#1F1330 0 2px, transparent 2px 4px, #1F1330 4px 5px, transparent 5px 8px, #1F1330 8px 10px, transparent 10px 13px);
-    opacity:0.85;
-    border-radius:2px;
-  }
-  .barcode-num{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;text-align:center;font-family:monospace;}
-
-  .empty-state{
-    grid-column:1/-1;
-    text-align:center;
-    padding:60px 20px;
-    color:var(--muted);
-  }
-  .empty-state svg{margin-bottom:10px;color:var(--purple-border);}
-  .empty-state p{font-size:16px;font-weight:600;}
-
-  /* ===== Modal ===== */
-  .overlay{
-    position:fixed;inset:0;
-    background:rgba(31,19,48,0.55);
-    display:none;
-    align-items:flex-end;
-    justify-content:center;
-    z-index:100;
-    padding:0;
-  }
-  .overlay.open{display:flex;}
-  @media (min-width:640px){
-    .overlay{align-items:center;padding:20px;}
-  }
-  .modal{
-    background:#fff;
-    width:100%;
-    max-width:520px;
-    max-height:92vh;
-    overflow-y:auto;
-    border-radius:22px 22px 0 0;
-    padding:20px;
-    position:relative;
-    animation:slideUp .25s ease;
-  }
-  @media (min-width:640px){ .modal{border-radius:22px;} }
-  @keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-  .modal-close{
-    position:absolute;top:16px;left:16px;
-    width:34px;height:34px;
-    border-radius:999px;
-    border:none;
-    background:var(--purple-light);
-    color:var(--purple-dark);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .modal h2{margin:0 0 16px;font-size:19px;color:var(--purple-dark);padding-left:40px;}
-
-  .field{margin-bottom:14px;}
-  .field label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
-  .field input[type=text],
-  .field input[type=number],
-  .field input[type=url],
-  .field input[type=email],
-  .field input[type=password],
-  .field select,
-  .field textarea{
-    width:100%;
-    padding:11px 12px;
-    border:1px solid var(--purple-border);
-    border-radius:10px;
-    font-size:15px;
-    outline:none;
-    background:#fbfaff;
-  }
-  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);background:#fff;}
-  .field textarea{min-height:70px;resize:vertical;}
-  .req{color:var(--danger);}
-  .radio-row{display:flex;gap:10px;}
-  .radio-opt{
-    flex:1;
-    border:1px solid var(--purple-border);
-    border-radius:10px;
-    padding:10px;
-    text-align:center;
-    font-weight:700;
-    font-size:14px;
-    color:var(--muted);
-    cursor:pointer;
-  }
-  .radio-opt.selected{background:var(--purple);color:#fff;border-color:var(--purple);}
-  .radio-opt input{display:none;}
-  .cat-row{display:flex;gap:8px;}
-  .cat-row select{flex:1;}
-  .cat-row button{
-    flex-shrink:0;
-    width:44px;
-    border-radius:10px;
-    border:1px solid var(--purple-border);
-    background:var(--purple-light);
-    color:var(--purple-dark);
-    font-size:20px;
-    font-weight:700;
-  }
-  .img-preview{
-    width:100%;
-    aspect-ratio:16/9;
-    border-radius:12px;
-    background:var(--purple-light);
-    display:flex;align-items:center;justify-content:center;
-    overflow:hidden;
-    margin-bottom:10px;
-    color:var(--muted);
-    font-size:13px;
-  }
-  .img-preview img{width:100%;height:100%;object-fit:cover;}
-  .form-actions{display:flex;gap:10px;margin-top:8px;}
-  .btn{
-    flex:1;
-    padding:13px;
-    border-radius:12px;
-    border:none;
-    font-weight:700;
-    font-size:15px;
-  }
-  .btn-primary{background:var(--purple);color:#fff;}
-  .btn-primary:disabled{opacity:0.6;}
-  .btn-secondary{background:var(--purple-light);color:var(--purple-dark);}
-
-  /* Detail modal specifics */
-  .detail-img{width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;margin-bottom:14px;background:var(--purple-light);}
-  .detail-img img{width:100%;height:100%;object-fit:cover;}
-  .detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--purple-border);font-size:14px;}
-  .detail-row span:first-child{color:var(--muted);font-weight:600;}
-  .detail-row span:last-child{font-weight:700;}
-  .detail-desc{margin-top:12px;font-size:14px;line-height:1.7;color:var(--text);}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ===== Header ===== -->
 <header class="topbar">
-  <a class="phone-pill" href="tel:07508457841">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-    <span dir="ltr">07508457841</span>
-  </a>
+  <div class="cart-wrap">
+    <button class="icon-btn cart-btn" id="cartBtn" aria-label="cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-badge" id="cartBadge" hidden>0</span>
+    </button>
+    <span class="cart-total" id="cartTotal" hidden>0</span>
+  </div>
+
   <div class="brand">
-    <span class="brand-name" id="brandName">جوملە</span>
+    <span class="brand-name" id="brandName">کۆگا</span>
     <span class="brand-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 21V13h6v8"/></svg>
     </span>
   </div>
+
+  <a class="phone-pill" id="whatsappBtn" href="https://wa.me/9647508457841" target="_blank" rel="noopener">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.14h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.11.82.83-3.03-.2-.31a8.19 8.19 0 0 1-1.26-4.39c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.23-8.25 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.4-.12-.56.13-.17.24-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.38-1.99-1.22-.74-.65-1.23-1.46-1.38-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.83-.2-.48-.41-.42-.56-.42-.14-.01-.31-.01-.48-.01a.9.9 0 0 0-.66.31c-.23.24-.87.85-.87 2.08 0 1.22.89 2.4 1.02 2.57.12.16 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.11-.23-.17-.48-.29z"/></svg>
+    <span dir="ltr">07508457841</span>
+  </a>
 </header>
 
-<!-- ===== Subheader: menu + search ===== -->
+<!-- ===== Subheader: menu + search + filter ===== -->
 <div class="subbar">
   <div class="menu-wrap">
     <button class="icon-btn" id="menuBtn" aria-label="menu">
@@ -405,6 +46,11 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         <span id="menuLangText">گۆڕینی زمان</span>
       </button>
+      <div class="lang-options" id="langOptions">
+        <button data-lang="ku">کوردی (سۆرانی)</button>
+        <button data-lang="ar">العربية</button>
+        <button data-lang="en">English</button>
+      </div>
       <button id="menuInfo">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         <span id="menuInfoText">زانیاری</span>
@@ -423,16 +69,46 @@
       </button>
     </div>
   </div>
+
   <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="گەڕان بۆ کاڵا...">
+    <input type="text" id="searchInput" placeholder="گەڕان...">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
   </div>
+
+  <button class="icon-btn filter-btn" id="filterBtn" aria-label="filter">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="11" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
+    <span class="filter-dot" id="filterDot" hidden></span>
+  </button>
+</div>
+
+<!-- ===== Category horizontal scroller (Shein-style) ===== -->
+<div class="cat-scroll-wrap">
+  <div class="cat-scroll" id="catScroll"></div>
+</div>
+
+<!-- ===== Auto-sliding banner carousel ===== -->
+<div class="carousel" id="carousel">
+  <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-slide"><img src="https://i.ibb.co/yBpg1RHK/Neutral-Elegant-Minimalist-Beauty-Make-Up-Business-Card.jpg" alt="Banner 1" loading="lazy"></div>
+    <div class="carousel-slide"><img src="https://i.ibb.co/W4m1vB6h/Neutral-Elegant-Minimalist-Beauty-Make-Up-Business-Card.jpg" alt="Banner 2" loading="lazy"></div>
+  </div>
+  <div class="carousel-dots" id="carouselDots"></div>
 </div>
 
 <!-- ===== Tabs ===== -->
 <div class="tabs">
-  <button class="tab-btn active" id="tabMain" data-section="main">بەشی سەرەکی</button>
-  <button class="tab-btn" id="tabOffers" data-section="offers">بەشی ئۆفەر</button>
+  <button class="tab-btn active" id="tabMain" data-section="main">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 21V13h6v8"/></svg>
+    <span id="tabMainText">بەشی سەرەکی</span>
+  </button>
+  <button class="tab-btn" id="tabOffers" data-section="offers">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+    <span id="tabOffersText">بەشی ئۆفەر</span>
+  </button>
+  <button class="tab-btn" id="tabLocal" data-section="local">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/></svg>
+    <span id="tabLocalText">بەرهەمی ناوخۆ</span>
+  </button>
 </div>
 
 <!-- ===== Product grid ===== -->
@@ -444,12 +120,18 @@
     <button class="modal-close" id="detailClose">✕</button>
     <div class="detail-img"><img id="detailImg" src="" alt="" referrerpolicy="no-referrer"></div>
     <h2 id="detailName" style="padding-left:0;"></h2>
+    <div class="detail-row"><span id="lblCodeD">کۆدی کاڵا</span><span id="detailCode"></span></div>
+    <div class="detail-row"><span id="lblCompanyD">ناوی کۆمپانیا</span><span id="detailCompany"></span></div>
     <div class="detail-row"><span id="lblPieceD">نرخی دانه</span><span id="detailPiece"></span></div>
     <div class="detail-row"><span id="lblCartonD">نرخی کارتۆن</span><span id="detailCarton"></span></div>
     <div class="detail-row"><span id="lblUnitsD">دانه/کارتۆن</span><span id="detailUnits"></span></div>
     <div class="detail-row"><span id="lblCatD">جۆر</span><span id="detailCat"></span></div>
     <div class="detail-row"><span id="lblBarcodeD">بارکۆد</span><span id="detailBarcode"></span></div>
     <div class="detail-desc" id="detailDesc"></div>
+    <button class="btn btn-primary" id="detailAddCart" style="margin-top:14px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:6px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span id="detailAddCartText">زیادکردن بۆ سەبەتە</span>
+    </button>
   </div>
 </div>
 
@@ -458,7 +140,46 @@
   <div class="modal" style="max-width:420px;">
     <button class="modal-close" id="infoClose">✕</button>
     <h2 id="infoTitle">زانیاری</h2>
-    <p id="infoText" style="font-size:15px;line-height:2;color:var(--text);margin:0;"></p>
+    <p id="infoText" style="font-size:15px;line-height:2.1;color:var(--text);margin:0;white-space:pre-line;"></p>
+  </div>
+</div>
+
+<!-- ===== Filter modal ===== -->
+<div class="overlay" id="filterOverlay">
+  <div class="modal">
+    <button class="modal-close" id="filterClose">✕</button>
+    <h2 id="filterTitle">پۆلەکان</h2>
+    <div class="filter-cats" id="filterCats"></div>
+    <div class="filter-sort-title" id="filterSortTitle">ڕیزکردن بەپێی نرخ</div>
+    <div class="sort-row">
+      <button class="sort-opt" id="sortLow" data-sort="low">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        <span id="sortLowText">کەمترین نرخ</span>
+      </button>
+      <button class="sort-opt" id="sortHigh" data-sort="high">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        <span id="sortHighText">زۆرترین نرخ</span>
+      </button>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" id="filterResetBtn">پاکردنەوە</button>
+      <button type="button" class="btn btn-primary" id="filterApplyBtn">جێبەجێکردن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Cart modal ===== -->
+<div class="overlay" id="cartOverlay">
+  <div class="modal">
+    <button class="modal-close" id="cartClose">✕</button>
+    <h2 id="cartTitle">سەبەتەی کڕین</h2>
+    <div id="cartList"></div>
+    <div class="cart-footer">
+      <button type="button" class="btn btn-order" id="cartOrderBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-3px;margin-left:6px;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.14h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.11.82.83-3.03-.2-.31a8.19 8.19 0 0 1-1.26-4.39c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.23-8.25 8.23z"/></svg>
+        <span id="cartOrderText">داواکردن لە وەتساپ</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -500,10 +221,21 @@
         <label id="lblName">ناوی کاڵا <span class="req">*</span></label>
         <input type="text" id="fName" required>
       </div>
+      <div class="field-row">
+        <div class="field">
+          <label id="lblCode">کۆدی کاڵا</label>
+          <input type="text" id="fCode">
+        </div>
+        <div class="field">
+          <label id="lblCompany">ناوی کۆمپانیا</label>
+          <input type="text" id="fCompany">
+        </div>
+      </div>
       <div class="field">
-        <label id="lblCategory">جۆر / پۆل</label>
+        <label id="lblCategory">جۆر / پۆل <span class="hint" id="lblCategoryHint">(دەتوانیت چەند پۆلێک هەڵبژێریت)</span></label>
+        <div class="chip-select" id="fCategories"></div>
         <div class="cat-row">
-          <select id="fCategory"></select>
+          <input type="text" id="newCatInput" placeholder="پۆلی نوێ...">
           <button type="button" id="addCatBtn">+</button>
         </div>
       </div>
@@ -518,15 +250,19 @@
             <input type="radio" name="section" value="offers">
             <span id="optOffersText">بەشی ئۆفەر</span>
           </label>
+          <label class="radio-opt" id="optLocal">
+            <input type="radio" name="section" value="local">
+            <span id="optLocalText">بەرهەمی ناوخۆ</span>
+          </label>
         </div>
       </div>
       <div class="field">
         <label id="lblPiece">نرخی دانه <span class="req">*</span></label>
-        <input type="number" id="fPiece" min="0" step="1" required>
+        <input type="text" id="fPiece" inputmode="decimal" placeholder="12500 یان $12.50" required>
       </div>
       <div class="field">
         <label id="lblCarton">نرخی کارتۆن</label>
-        <input type="number" id="fCarton" min="0" step="1">
+        <input type="text" id="fCarton" inputmode="decimal" placeholder="12500 یان $12.50">
       </div>
       <div class="field">
         <label id="lblUnits">ژمارەی دانه له کارتۆنێکدا</label>
@@ -552,673 +288,6 @@
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-database-compat.js"></script>
-
-<script>
-(function(){
-  "use strict";
-
-  /* ============ Broken image fallback (no dependencies — safe to define first) ============ */
-  const PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="#E5E7EB"/><g fill="none" stroke="#9CA3AF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><rect x="70" y="90" width="260" height="200" rx="16"/><circle cx="150" cy="150" r="20"/><path d="M70 250l70-70 50 50 60-80 80 100"/></g></svg>`;
-  const PLACEHOLDER_IMG = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(PLACEHOLDER_SVG);
-  // Exposed on window so it can be called from inline onerror="" attributes in generated HTML
-  window.handleImgError = function(el){
-    el.onerror = null; // prevent loop if placeholder itself ever fails
-    el.src = PLACEHOLDER_IMG;
-    el.style.objectFit = 'contain';
-    el.style.padding = '14%';
-    el.style.opacity = '1';
-  };
-
-  /* ============ imgbb / ibb.co link normalizer ============
-     imgbb's own "page" links (ibb.co/xxxxx) are an HTML viewer page, not an
-     actual image file, so an <img> tag can never load them directly — only
-     the "Direct link" imgbb gives you (starting with i.ibb.co) is a real
-     image URL. This best-effort helper rewrites the common ibb.co/imgbb.com
-     link shapes onto the i.ibb.co direct-image host. It can't work miracles
-     for every possible imgbb link shape (that would need a server-side
-     fetch, which a static site can't do), so broken links still safely fall
-     back to the gray placeholder via handleImgError above. */
-  function normalizeImageUrl(url){
-    if(!url) return url;
-    const trimmed = url.trim();
-    let u;
-    try{ u = new URL(trimmed); }catch(e){ return trimmed; } // not a valid URL, leave as-is
-    const host = u.hostname.replace(/^www\./,'');
-
-    if(host === 'i.ibb.co'){
-      return trimmed; // already a direct imgbb image link
-    }
-    if(host === 'ibb.co'){
-      // https://ibb.co/abcXYZ  ->  https://i.ibb.co/abcXYZ
-      return 'https://i.ibb.co' + u.pathname + u.search;
-    }
-    if(host === 'imgbb.com' && u.pathname.startsWith('/image/')){
-      // https://imgbb.com/image/abcXYZ  ->  https://i.ibb.co/abcXYZ
-      return 'https://i.ibb.co' + u.pathname.replace('/image', '') + u.search;
-    }
-    return trimmed;
-  }
-
-  /* ============ Local (non-product) keys ============ */
-  const K_LANG = 'jwmla_lang_v1'; // language preference stays per-device; it's a display setting, not shared catalog data
-
-  /* ============ Translations ============ */
-  const T = {
-    ku: {
-      brandName:'جوملە', tabMain:'بەشی سەرەکی', tabOffers:'بەشی ئۆفەر',
-      searchPlaceholder:'گەڕان بۆ کاڵا...', menuLangText:'گۆڕینی زمان', menuAddText:'زیادکردنی کاڵا',
-      menuInfoText:'زانیاری', infoTitle:'زانیاری',
-      formTitleAdd:'زیادکردنی کاڵا', formTitleEdit:'دەستکاریکردنی کاڵا',
-      lblImage:'لینکی وێنه (URL)', imgPreviewText:'وێنه لێرە دەردەکەوێت',
-      lblName:'ناوی کاڵا', lblCategory:'جۆر / پۆل', lblSection:'شوێنی دەرکەوتن',
-      optMainText:'بەشی سەرەکی', optOffersText:'بەشی ئۆفەر',
-      lblPiece:'نرخی دانه', lblCarton:'نرخی کارتۆن', lblUnits:'ژمارەی دانه له کارتۆنێکدا',
-      lblBarcode:'بارکۆد', lblDesc:'تێبینی / وردەکاری',
-      cancelBtn:'پاشگەزبوونەوه', saveBtn:'پاشەکەوتکردن', savingBtn:'پاشەکەوتکردن...',
-      newCatPrompt:'ناوی پۆلی نوێ بنووسه', pieceLabel:'نرخی دانه', cartonLabel:'کارتۆن',
-      perCarton:'دانه/کارتۆن', confirmDelete:'دڵنیایت لە سڕینەوەی ئەم کاڵایه؟',
-      emptyText:'هیچ کاڵایەک نییه', noResults:'هیچ ئەنجامێک نەدۆزرایەوه', loadingText:'بارکردن...',
-      lblPieceD:'نرخی دانه', lblCartonD:'نرخی کارتۆن', lblUnitsD:'دانه/کارتۆن',
-      lblCatD:'جۆر', lblBarcodeD:'بارکۆد', noBarcode:'نییه', noCarton:'نییه',
-      uncategorized:'بێ پۆل', currency:'د.ع',
-      menuLoginText:'چوونەژوورەوە', menuLogoutText:'دەرچوون', loginTitle:'چوونەژوورەوەی بەڕێوەبەر',
-      lblEmail:'ئیمەیل', lblPassword:'وشەی نهێنی', loginSubmitBtn:'چوونەژوورەوە',
-      loginError:'ئیمەیل یان وشەی نهێنی هەڵەیه', pleaseLogin:'تکایە سەرەتا بچووە ژوورەوە',
-      notConnected:'پەیوەندی بە داتابەیسەوە نییه. تکایە پەیجەکە نوێ بکەرەوە.',
-      dbError:'کێشەیەک لە پەیوەندیکردن بە داتابەیس ڕوویدا. تکایە دواتر هەوڵ بدەرەوە.',
-      errorPrefix:'هەڵەیەک ڕوویدا: '
-    },
-    ar: {
-      brandName:'جوملە', tabMain:'الرئيسية', tabOffers:'العروض',
-      searchPlaceholder:'ابحث عن منتج...', menuLangText:'تغيير اللغة', menuAddText:'إضافة منتج',
-      menuInfoText:'زانیاری', infoTitle:'زانیاری',
-      formTitleAdd:'إضافة منتج', formTitleEdit:'تعديل المنتج',
-      lblImage:'رابط الصورة (URL)', imgPreviewText:'ستظهر الصورة هنا',
-      lblName:'اسم المنتج', lblCategory:'الفئة', lblSection:'مكان الظهور',
-      optMainText:'الرئيسية', optOffersText:'العروض',
-      lblPiece:'سعر القطعة', lblCarton:'سعر الكرتون', lblUnits:'عدد القطع في الكرتون',
-      lblBarcode:'الباركود', lblDesc:'ملاحظات / تفاصيل',
-      cancelBtn:'إلغاء', saveBtn:'حفظ', savingBtn:'جارٍ الحفظ...',
-      newCatPrompt:'اكتب اسم الفئة الجديدة', pieceLabel:'سعر القطعة', cartonLabel:'كرتون',
-      perCarton:'قطعة/كرتون', confirmDelete:'هل أنت متأكد من حذف هذا المنتج؟',
-      emptyText:'لا توجد منتجات', noResults:'لا توجد نتائج', loadingText:'جارٍ التحميل...',
-      lblPieceD:'سعر القطعة', lblCartonD:'سعر الكرتون', lblUnitsD:'قطعة/كرتون',
-      lblCatD:'الفئة', lblBarcodeD:'الباركود', noBarcode:'غير متوفر', noCarton:'غير متوفر',
-      uncategorized:'بدون فئة', currency:'د.ع',
-      menuLoginText:'تسجيل الدخول', menuLogoutText:'تسجيل الخروج', loginTitle:'دخول المسؤول',
-      lblEmail:'البريد الإلكتروني', lblPassword:'كلمة المرور', loginSubmitBtn:'تسجيل الدخول',
-      loginError:'البريد الإلكتروني أو كلمة المرور غير صحيحة', pleaseLogin:'يرجى تسجيل الدخول أولاً',
-      notConnected:'لا يوجد اتصال بقاعدة البيانات. يرجى تحديث الصفحة.',
-      dbError:'حدث خطأ في الاتصال بقاعدة البيانات. يرجى المحاولة لاحقاً.',
-      errorPrefix:'حدث خطأ: '
-    }
-  };
-
-  /* ============ State ============
-     Every one of these is defined before any Firebase code runs, on purpose:
-     if Firebase ever fails to load (network hiccup, ad-blocker, bad config),
-     nothing here breaks, and the functions below it keep working normally. */
-  let lang = localStorage.getItem(K_LANG) || 'ku';
-  let currentSection = 'main';
-  let searchTerm = '';
-  let editingId = null;
-
-  let productsCache = [];
-  let productsLoaded = false;
-  let categoriesCache = [];
-
-  let isAdmin = false;
-  let firebaseReady = false; // becomes true only once Firebase has actually initialized successfully
-  let auth = null, db = null, productsRef = null, categoriesRef = null;
-
-  function fmt(n){
-    if(n === null || n === undefined || n === '') return null;
-    return Number(n).toLocaleString('en-US');
-  }
-
-  /* ============ i18n apply ============ */
-  function applyLang(){
-    const dict = T[lang];
-    document.documentElement.lang = lang === 'ku' ? 'ku' : 'ar';
-    document.documentElement.dir = 'rtl';
-    document.getElementById('brandName').textContent = dict.brandName;
-    document.getElementById('tabMain').textContent = dict.tabMain;
-    document.getElementById('tabOffers').textContent = dict.tabOffers;
-    document.getElementById('searchInput').placeholder = dict.searchPlaceholder;
-    document.getElementById('menuLangText').textContent = dict.menuLangText;
-    document.getElementById('menuInfoText').textContent = dict.menuInfoText;
-    document.getElementById('infoTitle').textContent = dict.infoTitle;
-    document.getElementById('menuLoginText').textContent = dict.menuLoginText;
-    document.getElementById('menuLogoutText').textContent = dict.menuLogoutText;
-    document.getElementById('loginTitle').textContent = dict.loginTitle;
-    document.getElementById('lblEmail').textContent = dict.lblEmail;
-    document.getElementById('lblPassword').textContent = dict.lblPassword;
-    document.getElementById('loginSubmitBtn').textContent = dict.loginSubmitBtn;
-    document.getElementById('menuAddText').textContent = dict.menuAddText;
-    document.getElementById('lblImage').innerHTML = dict.lblImage;
-    document.getElementById('imgPreview').textContent = dict.imgPreviewText;
-    document.getElementById('lblName').innerHTML = dict.lblName + ' <span class="req">*</span>';
-    document.getElementById('lblCategory').textContent = dict.lblCategory;
-    document.getElementById('lblSection').textContent = dict.lblSection;
-    document.getElementById('optMainText').textContent = dict.optMainText;
-    document.getElementById('optOffersText').textContent = dict.optOffersText;
-    document.getElementById('lblPiece').innerHTML = dict.lblPiece + ' <span class="req">*</span>';
-    document.getElementById('lblCarton').textContent = dict.lblCarton;
-    document.getElementById('lblUnits').textContent = dict.lblUnits;
-    document.getElementById('lblBarcode').textContent = dict.lblBarcode;
-    document.getElementById('lblDesc').textContent = dict.lblDesc;
-    document.getElementById('cancelBtn').textContent = dict.cancelBtn;
-    document.getElementById('loginCancelBtn').textContent = dict.cancelBtn;
-    document.getElementById('saveBtn').textContent = dict.saveBtn;
-    document.getElementById('lblPieceD').textContent = dict.lblPieceD;
-    document.getElementById('lblCartonD').textContent = dict.lblCartonD;
-    document.getElementById('lblUnitsD').textContent = dict.lblUnitsD;
-    document.getElementById('lblCatD').textContent = dict.lblCatD;
-    document.getElementById('lblBarcodeD').textContent = dict.lblBarcodeD;
-    localStorage.setItem(K_LANG, lang);
-  }
-
-  /* ============ Rendering products ============ */
-  function renderCategorySelect(selectedValue){
-    const sel = document.getElementById('fCategory');
-    const dict = T[lang];
-    sel.innerHTML = '<option value="">' + dict.uncategorized + '</option>' +
-      categoriesCache.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-    if(selectedValue) sel.value = selectedValue;
-  }
-
-  function escapeHtml(str){
-    if(str === undefined || str === null) return '';
-    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  }
-
-  function renderGrid(){
-    const dict = T[lang];
-    const grid = document.getElementById('grid');
-
-    if(!firebaseReady && productsLoaded){
-      // Firebase failed to initialize (see the try/catch further down) — tell the
-      // person plainly instead of leaving them staring at an empty grid forever.
-      grid.innerHTML = `<div class="empty-state"><p>${dict.dbError}</p></div>`;
-      return;
-    }
-
-    if(!productsLoaded){
-      grid.innerHTML = `<div class="empty-state"><p>${dict.loadingText}</p></div>`;
-      return;
-    }
-
-    let list = productsCache.filter(p => p.section === currentSection);
-    if(searchTerm.trim()){
-      const q = searchTerm.trim().toLowerCase();
-      list = list.filter(p => (p.name || '').toLowerCase().includes(q));
-    }
-    if(list.length === 0){
-      grid.innerHTML = `<div class="empty-state">
-        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 21V13h6v8"/></svg>
-        <p>${searchTerm.trim() ? dict.noResults : dict.emptyText}</p>
-      </div>`;
-      return;
-    }
-    grid.innerHTML = list.map(p => cardHtml(p, dict)).join('');
-    grid.querySelectorAll('[data-view]').forEach(el => {
-      el.addEventListener('click', () => openDetail(el.getAttribute('data-view')));
-    });
-    grid.querySelectorAll('[data-edit]').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openForm(el.getAttribute('data-edit'));
-      });
-    });
-    grid.querySelectorAll('[data-delete]').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        deleteProduct(el.getAttribute('data-delete'));
-      });
-    });
-  }
-
-  function cardHtml(p, dict){
-    const cartonTxt = p.cartonPrice ? fmt(p.cartonPrice) : dict.noCarton;
-    const badge = p.units ? `<div class="card-badge">${p.units}<br>${dict.perCarton}</div>` : '';
-    const barcodeBlock = p.barcode ? `
-      <div class="barcode-wrap">
-        <div class="barcode-bars"></div>
-        <div class="barcode-num">${escapeHtml(p.barcode)}</div>
-      </div>` : '';
-    const img = p.image ? escapeHtml(p.image) : '';
-    const actionsBlock = isAdmin ? `
-        <div class="card-actions">
-          <button class="mini-btn edit" data-edit="${p.id}" aria-label="edit">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
-          <button class="mini-btn delete" data-delete="${p.id}" aria-label="delete">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          </button>
-        </div>` : '';
-    return `
-    <div class="card">
-      <div class="card-media" data-view="${p.id}">
-        <img src="${img}" alt="${escapeHtml(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImgError(this)">
-        ${actionsBlock}
-        ${badge}
-      </div>
-      <div class="card-body" data-view="${p.id}">
-        <div class="card-title">${escapeHtml(p.name)}</div>
-        <div class="price-main">${fmt(p.piecePrice)} <span class="label">${dict.pieceLabel}</span></div>
-        <div class="price-carton"><span>${dict.cartonLabel}:</span> ${cartonTxt}</div>
-        ${barcodeBlock}
-      </div>
-    </div>`;
-  }
-
-  /* ============ Detail modal (open to everyone) ============ */
-  function openDetail(id){
-    const p = productsCache.find(x => x.id === id);
-    if(!p) return;
-    const dict = T[lang];
-    const detailImgEl = document.getElementById('detailImg');
-    detailImgEl.onerror = () => handleImgError(detailImgEl);
-    detailImgEl.src = p.image || '';
-    document.getElementById('detailName').textContent = p.name;
-    document.getElementById('detailPiece').textContent = fmt(p.piecePrice) + ' ' + dict.currency;
-    document.getElementById('detailCarton').textContent = p.cartonPrice ? fmt(p.cartonPrice) + ' ' + dict.currency : dict.noCarton;
-    document.getElementById('detailUnits').textContent = p.units || dict.noCarton;
-    document.getElementById('detailCat').textContent = p.category || dict.uncategorized;
-    document.getElementById('detailBarcode').textContent = p.barcode || dict.noBarcode;
-    document.getElementById('detailDesc').textContent = p.desc || '';
-    document.getElementById('detailOverlay').classList.add('open');
-  }
-  document.getElementById('detailClose').addEventListener('click', () => {
-    document.getElementById('detailOverlay').classList.remove('open');
-  });
-  document.getElementById('detailOverlay').addEventListener('click', (e) => {
-    if(e.target.id === 'detailOverlay') document.getElementById('detailOverlay').classList.remove('open');
-  });
-
-  /* ============ Form modal (Add/Edit) — admin-only ============ */
-  function openForm(id){
-    if(!isAdmin){
-      // Defense-in-depth: the button that calls this is hidden for non-admins,
-      // but this check stops the modal from opening even if triggered another way.
-      alert(T[lang].pleaseLogin);
-      return;
-    }
-    if(id && String(id).indexOf('temp_') === 0){
-      // This card is a local optimistic entry still being written to the database —
-      // there is no real document to edit yet. Block instead of erroring out.
-      alert(lang === 'ku'
-        ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
-        : 'يرجى الانتظار، جارٍ حفظ المنتج...');
-      return;
-    }
-    editingId = id || null;
-    const dict = T[lang];
-    document.getElementById('formTitle').textContent = editingId ? dict.formTitleEdit : dict.formTitleAdd;
-    const form = document.getElementById('productForm');
-    form.reset();
-    renderCategorySelect();
-    setSection('main');
-    document.getElementById('imgPreview').innerHTML = dict.imgPreviewText;
-
-    if(editingId){
-      const p = productsCache.find(x => x.id === editingId);
-      if(p){
-        document.getElementById('fImage').value = p.image || '';
-        document.getElementById('fName').value = p.name || '';
-        renderCategorySelect(p.category || '');
-        setSection(p.section || 'main');
-        document.getElementById('fPiece').value = p.piecePrice ?? '';
-        document.getElementById('fCarton').value = p.cartonPrice ?? '';
-        document.getElementById('fUnits').value = p.units ?? '';
-        document.getElementById('fBarcode').value = p.barcode || '';
-        document.getElementById('fDesc').value = p.desc || '';
-        updateImgPreview();
-      }
-    }
-    document.getElementById('formOverlay').classList.add('open');
-  }
-  function closeForm(){
-    document.getElementById('formOverlay').classList.remove('open');
-    editingId = null;
-  }
-  document.getElementById('formClose').addEventListener('click', closeForm);
-  document.getElementById('cancelBtn').addEventListener('click', closeForm);
-  document.getElementById('formOverlay').addEventListener('click', (e) => {
-    if(e.target.id === 'formOverlay') closeForm();
-  });
-
-  function setSection(val){
-    const main = document.getElementById('optMain');
-    const offers = document.getElementById('optOffers');
-    main.classList.toggle('selected', val === 'main');
-    offers.classList.toggle('selected', val === 'offers');
-    main.querySelector('input').checked = val === 'main';
-    offers.querySelector('input').checked = val === 'offers';
-  }
-  document.getElementById('optMain').addEventListener('click', () => setSection('main'));
-  document.getElementById('optOffers').addEventListener('click', () => setSection('offers'));
-
-  function updateImgPreview(){
-    const raw = document.getElementById('fImage').value.trim();
-    const url = normalizeImageUrl(raw);
-    const box = document.getElementById('imgPreview');
-    const dict = T[lang];
-    if(url){
-      box.innerHTML = `<img src="${escapeHtml(url)}" referrerpolicy="no-referrer" onerror="handleImgError(this)">`;
-    } else {
-      box.textContent = dict.imgPreviewText;
-    }
-  }
-  document.getElementById('fImage').addEventListener('input', updateImgPreview);
-
-  document.getElementById('addCatBtn').addEventListener('click', async () => {
-    const dict = T[lang];
-    if(!firebaseReady){ alert(dict.notConnected); return; }
-    const raw = prompt(dict.newCatPrompt);
-    const name = raw ? raw.trim() : '';
-    if(!name) return; // cancelled or empty input
-    const addCatBtn = document.getElementById('addCatBtn');
-    addCatBtn.disabled = true;
-    try{
-      await addCategoryToDb(name);
-      // Optimistically update the local cache right away instead of waiting for the
-      // realtime listener round-trip — this was the cause of the selection bug,
-      // where the dropdown was rebuilt before the new option actually existed in it.
-      if(!categoriesCache.includes(name)){
-        categoriesCache = [...categoriesCache, name];
-      }
-      renderCategorySelect(name);
-    }catch(err){
-      alert(dict.errorPrefix + err.message);
-    }finally{
-      addCatBtn.disabled = false;
-    }
-  });
-
-  document.getElementById('productForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const dict = T[lang];
-    if(!isAdmin){
-      alert(dict.pleaseLogin);
-      return;
-    }
-    if(!firebaseReady){
-      alert(dict.notConnected);
-      return;
-    }
-    const section = document.querySelector('input[name="section"]:checked').value;
-    const data = {
-      name: document.getElementById('fName').value.trim(),
-      image: normalizeImageUrl(document.getElementById('fImage').value.trim()),
-      category: document.getElementById('fCategory').value,
-      section: section,
-      piecePrice: Number(document.getElementById('fPiece').value) || 0,
-      cartonPrice: document.getElementById('fCarton').value ? Number(document.getElementById('fCarton').value) : null,
-      units: document.getElementById('fUnits').value ? Number(document.getElementById('fUnits').value) : null,
-      barcode: document.getElementById('fBarcode').value.trim(),
-      desc: document.getElementById('fDesc').value.trim()
-    };
-
-    if(!data.name || !data.piecePrice){
-      alert(dict.errorPrefix + (lang === 'ku' ? 'ناو و نرخی دانه پێویستن' : 'الاسم وسعر القطعة مطلوبان'));
-      return;
-    }
-
-    const isEditing = !!editingId;
-    const targetId = editingId;
-    let previousEntry = null;
-    let tempId = null;
-
-    // --- 1) Optimistic UI update: reflect the change instantly, don't wait on the network ---
-    if(isEditing){
-      const idx = productsCache.findIndex(p => p.id === targetId);
-      if(idx > -1){
-        previousEntry = { ...productsCache[idx] };
-        productsCache = productsCache.map(p => p.id === targetId ? { ...p, ...data } : p);
-      }
-    } else {
-      tempId = 'temp_' + Date.now() + '_' + Math.random().toString(16).slice(2);
-      productsCache = [{ id: tempId, ...data }, ...productsCache];
-    }
-    setActiveTab(section); // switches tab if needed and re-renders the grid immediately
-    closeForm();
-
-    // --- 2) Sync to the database in the background; roll back only if it actually fails ---
-    const request = isEditing ? updateProductInDb(targetId, data) : addProductToDb(data);
-    request.catch((err) => {
-      if(isEditing && previousEntry){
-        productsCache = productsCache.map(p => p.id === targetId ? previousEntry : p);
-      } else if(tempId){
-        productsCache = productsCache.filter(p => p.id !== tempId);
-      }
-      renderGrid();
-      alert(dict.errorPrefix + err.message);
-    });
-  });
-
-  async function deleteProduct(id){
-    const dict = T[lang];
-    if(!isAdmin){
-      alert(dict.pleaseLogin);
-      return;
-    }
-    if(!firebaseReady){
-      alert(dict.notConnected);
-      return;
-    }
-    if(String(id).indexOf('temp_') === 0){
-      alert(lang === 'ku'
-        ? 'تکایە چاوەڕێ بکە، کاڵاکە هێشتا پاشەکەوت دەکرێت...'
-        : 'يرجى الانتظار، جارٍ حفظ المنتج...');
-      return;
-    }
-    if(!confirm(dict.confirmDelete)) return;
-    try{
-      await deleteProductFromDb(id);
-    }catch(err){
-      alert(dict.errorPrefix + err.message);
-    }
-  }
-
-  /* ============ Tabs ============ */
-  function setActiveTab(section){
-    currentSection = section;
-    document.getElementById('tabMain').classList.toggle('active', section === 'main');
-    document.getElementById('tabOffers').classList.toggle('active', section === 'offers');
-    renderGrid();
-  }
-  document.getElementById('tabMain').addEventListener('click', () => setActiveTab('main'));
-  document.getElementById('tabOffers').addEventListener('click', () => setActiveTab('offers'));
-
-  /* ============ Search ============ */
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    searchTerm = e.target.value;
-    renderGrid();
-  });
-
-  /* ============ Dropdown menu ============
-     stopPropagation() on the button's own click keeps this same click from
-     also reaching the document-level listener below, so opening the menu
-     can never immediately close itself again. */
-  const menuBtn = document.getElementById('menuBtn');
-  const dropdown = document.getElementById('dropdown');
-  menuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-  document.addEventListener('click', (e) => {
-    if(!dropdown.contains(e.target) && e.target !== menuBtn){
-      dropdown.classList.remove('open');
-    }
-  });
-  document.getElementById('menuAdd').addEventListener('click', () => {
-    dropdown.classList.remove('open');
-    openForm(null);
-  });
-  document.getElementById('menuLang').addEventListener('click', () => {
-    dropdown.classList.remove('open');
-    lang = lang === 'ku' ? 'ar' : 'ku';
-    applyLang();
-    renderGrid();
-  });
-  document.getElementById('menuInfo').addEventListener('click', () => {
-    dropdown.classList.remove('open');
-    document.getElementById('infoText').textContent =
-      'بۆ داواکردنی کاڵا یان زیاد کردنی کاڵا لە وێبسایتی جوملە پەیوەندی بەم ژمارە بکە 07508457841';
-    document.getElementById('infoOverlay').classList.add('open');
-  });
-  document.getElementById('infoClose').addEventListener('click', () => {
-    document.getElementById('infoOverlay').classList.remove('open');
-  });
-  document.getElementById('infoOverlay').addEventListener('click', (e) => {
-    if(e.target.id === 'infoOverlay') document.getElementById('infoOverlay').classList.remove('open');
-  });
-
-  /* ============ Admin auth UI (pure DOM toggling — no Firebase dependency itself) ============ */
-  function updateAuthUI(){
-    document.getElementById('menuAdd').style.display = isAdmin ? 'flex' : 'none';
-    document.getElementById('menuLogin').style.display = isAdmin ? 'none' : 'flex';
-    document.getElementById('menuLogout').style.display = isAdmin ? 'flex' : 'none';
-  }
-
-  /* ============ Admin login / logout ============ */
-  function closeLoginModal(){
-    document.getElementById('loginOverlay').classList.remove('open');
-    document.getElementById('loginForm').reset();
-  }
-  document.getElementById('menuLogin').addEventListener('click', () => {
-    dropdown.classList.remove('open');
-    document.getElementById('loginOverlay').classList.add('open');
-  });
-  document.getElementById('menuLogout').addEventListener('click', () => {
-    dropdown.classList.remove('open');
-    if(!firebaseReady){ alert(T[lang].notConnected); return; }
-    auth.signOut();
-  });
-  document.getElementById('loginClose').addEventListener('click', closeLoginModal);
-  document.getElementById('loginCancelBtn').addEventListener('click', closeLoginModal);
-  document.getElementById('loginOverlay').addEventListener('click', (e) => {
-    if(e.target.id === 'loginOverlay') closeLoginModal();
-  });
-  document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const dict = T[lang];
-    if(!firebaseReady){ alert(dict.notConnected); return; }
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const btn = document.getElementById('loginSubmitBtn');
-    btn.disabled = true;
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        closeLoginModal(); // onAuthStateChanged fires automatically and updates the UI
-      })
-      .catch((err) => {
-        console.error('Login error:', err);
-        alert(dict.loginError);
-      })
-      .finally(() => {
-        btn.disabled = false;
-      });
-  });
-
-  /* ==========================================================
-     FIREBASE SETUP — Realtime Database + Authentication
-     Live project: jwmla-website.
-     Everything above this point is pure UI and works completely on its
-     own, regardless of whether Firebase successfully connects — that
-     separation is intentional: if this block ever throws (bad config,
-     network blocked, CDN unreachable), it's caught below and the rest of
-     the site (menu, tabs, search, modals) keeps working normally instead
-     of the single error taking down every feature on the page at once.
-  ========================================================== */
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwi7IjiTy4iSkv03hgfT5CUR6L8OkHGek",
-    authDomain: "jwmla-website.firebaseapp.com",
-    databaseURL: "https://jwmla-website-default-rtdb.firebaseio.com",
-    projectId: "jwmla-website",
-    storageBucket: "jwmla-website.firebasestorage.app",
-    messagingSenderId: "395127164111",
-    appId: "1:395127164111:web:0c6431809f28ca8591bbba"
-  };
-
-  try{
-    firebase.initializeApp(firebaseConfig);
-    auth = firebase.auth();
-    db = firebase.database();
-    productsRef = db.ref('products');
-    categoriesRef = db.ref('categories');
-    firebaseReady = true;
-
-    auth.onAuthStateChanged((user) => {
-      isAdmin = !!user;
-      updateAuthUI();
-      renderGrid(); // re-render cards so edit/delete icons appear or disappear
-    });
-
-    /* Realtime Database's .on('value', ...) fires immediately with whatever
-       is currently stored, then again on every future change — this is how
-       "products load automatically on refresh" and "updates propagate live"
-       both happen. Unlike Firestore's orderBy(), RTDB never silently
-       excludes a node for missing a field, but we still sort client-side to
-       keep control over ordering and gracefully handle legacy nodes. */
-    productsRef.on('value', (snapshot) => {
-      const val = snapshot.val() || {};
-      const docs = Object.keys(val).map(key => ({ id: key, ...val[key] }));
-      docs.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
-      productsCache = docs;
-      productsLoaded = true;
-      renderGrid();
-    }, (err) => {
-      console.error('Realtime Database products error:', err);
-      productsLoaded = true;
-      renderGrid();
-    });
-
-    categoriesRef.on('value', (snapshot) => {
-      const val = snapshot.val() || {};
-      categoriesCache = Object.values(val);
-    }, (err) => {
-      console.error('Realtime Database categories error:', err);
-    });
-  }catch(err){
-    console.error('Firebase failed to initialize:', err);
-    firebaseReady = false;
-    productsLoaded = true; // stop showing "loading" forever
-    renderGrid(); // shows the dbError message via the firebaseReady check above
-  }
-
-  /* ============ Realtime Database: write helpers ============
-     Each of these returns the underlying Realtime Database promise
-     unchanged, so callers can await/.then()/.catch() it to know for
-     certain whether the write actually reached the database — a product
-     is only ever "saved" once this promise resolves; productsCache is
-     just a temporary UI mirror of whatever the database itself currently
-     reports. push() generates a safe, unique key automatically. */
-  function addProductToDb(data){
-    return productsRef.push({
-      ...data,
-      createdAt: firebase.database.ServerValue.TIMESTAMP
-    });
-  }
-  function updateProductInDb(id, data){
-    return productsRef.child(id).update(data);
-  }
-  function deleteProductFromDb(id){
-    return productsRef.child(id).remove();
-  }
-  function addCategoryToDb(name){
-    // Realtime Database keys can't contain . # $ [ ] / — sanitize the
-    // category name into a safe key while keeping the real name as the value.
-    const safeKey = name.replace(/[.#$\[\]/]/g, '_');
-    return categoriesRef.child(safeKey).set(name);
-  }
-
-  /* ============ Init ============ */
-  applyLang();
-  setActiveTab('main');
-  renderGrid(); // shows the loading state immediately; the Realtime Database listener re-renders with real data
-})();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
