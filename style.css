@@ -209,6 +209,17 @@ img{max-width:100%;display:block;}
 .card-price{font-size:16px;font-weight:800;color:var(--black);}
 .card-price .sym{font-size:11px;font-weight:600;color:var(--muted);margin-right:2px;}
 .card.is-offer .card-price{color:var(--danger-dark);}
+.card-trend{
+  display:block;
+  font-size:10px;
+  font-style:italic;
+  font-weight:600;
+  color:#7c3aed;
+  margin-top:1px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
 /* ===== Out of stock overlay ===== */
 .card-oos-overlay{
@@ -234,6 +245,22 @@ img{max-width:100%;display:block;}
   padding:6px 13px;
   border-radius:999px;
 }
+.detail-nav-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:3;
+  width:34px;height:34px;
+  border-radius:999px;
+  border:none;
+  background:rgba(24,20,14,0.55);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(2px);
+}
+.detail-nav-arrow:active{background:rgba(24,20,14,0.8);}
+.detail-nav-prev{left:10px;}
+.detail-nav-next{right:10px;}
 
 .empty-state{
   grid-column:1/-1;
@@ -418,9 +445,15 @@ img{max-width:100%;display:block;}
 }
 .detail-dot.active{background:#fff;width:16px;}
 
-.detail-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+.detail-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
 .detail-price{font-size:24px;font-weight:800;color:var(--black);}
 .detail-price-label{font-size:12px;color:var(--muted);font-weight:600;}
+.detail-trend{
+  font-size:12px;
+  font-style:italic;
+  font-weight:600;
+  color:#7c3aed;
+}
 .detail-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px;}
 .detail-row span:first-child{color:var(--muted);font-weight:600;}
 .detail-row span:last-child{font-weight:700;}
