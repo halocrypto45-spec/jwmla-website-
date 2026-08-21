@@ -66,10 +66,17 @@
       settingsSavedMsg:'ڕێکخستنەکان پاشەکەوت کران', lblCompanyFilter:'کۆمپانیا', companyFilterAllOpt:'هەموو کۆمپانیاکان',
       lblOutOfStock:'نەماوە (کۆتایی هاتووە)', oosLabel:'نەماوە',
       infoCardTitle:'زانیاری',
-      infoBody:'١- کڕیاڕی بەڕێز لە کاتی داواکردنی کاڵا لە وێبسایتی کۆگا لە ماوەی ٣-٥ ڕۆژ کاڵاکان دەگاتە دەستان.\n٢- بۆ داواکردنی کاڵا یان زیاد کردنی کاڵا پەیوەندی بکەن بە ژمارە مۆبایلی 07508457841',
+      infoBody:`کڕیاڕی خۆشەویست لە کاتی داواکردنی هەر کاڵایەک لە (٣-٥) ڕۆژ دەگاتە دەستت
+
+سلام علیک
+سەرەتا بەناوی خوای گەورە مەبەست لە دروستکردنی ئەم وێبسایتە بەستنەوەی کۆگانی هەرێمی کوردستانە بە بازاڕی ناوخۆ(واتا ئەم کاڵایانەی لە کۆگا هەیە پێش ئەوەی بگاتە دەستی ماڕکێت و دوکانەکان خەڵک بتوانێ بە نرخی هەرزانتر بیکڕێت) هەندێک کاڵا هەیە لەم وێبە نرخی زۆر هەرزانە هەندێکی تریش کەمێک هەرزانە بەڵام ئەم نرخە پەیوەندی بە کوالێتی ئەم کاڵایەوە نیە کە لە بازارەکان دا هەن تەنیا هۆکاری ئەمەیە قازانجی زۆر کەم دەکرێتە سەر،
+وە هەر خاوەن کارێک یاخود دوکانێک دەیەوێت کاڵاکانی پێشنیار بکات بۆ ئەم وێبسایتە دەتوانێ پەیوەندیمان پێوە بکات (٠٧٥٠٨٤٥٧٨٤١) 
+وە لە داهاتوودا دەمانەوێت ئەم بەرهەمانەی لە ناخۆی هەرێمی کوردستان دروست دەکرێت لەم وێبسایتە بە خەڵکی بناسێنین وەک هەریەکە لە وێبە بەناوبانگەکان،
+لە ئێستادا وێبەکە کەم و کوڕی هەیە زۆر جۆری تر کاڵا ماوە دایبنێین بەڵام لە داهاتوودا ئینشلا چارەسەر دەبن هەر کەسێکیش پێشنیار یاخود پشتگیری هەیە بۆ ئەم وێبە پەیوەندیمان پێوەبکات 
+(سوپاس بۆ سەردانیکردنت)`,
       formTitleAdd:'زیادکردنی کاڵا', formTitleEdit:'دەستکاریکردنی کاڵا',
       lblImages:'وێنەکانی کاڵا (لینک)', addImageBtn:'+ زیادکردنی وێنەیەکی تر',
-      lblName:'ناوی کاڵا', lblCode:'کۆدی کاڵا', lblCompany:'ناوی کۆمپانیا',
+      lblName:'ناوی کاڵا', lblCode:'کۆدی کاڵا', lblCompany:'ناوی کۆمپانیا', lblTrend:'جۆری کاڵا (ئۆرجینال / کۆپی / ماستەرکۆپی)',
       lblCategory:'جۆر / پۆل', lblCategoryHint:'(دەتوانیت چەند پۆلێک هەڵبژێریت)', lblSection:'شوێنی دەرکەوتن',
       optMainText:'بەشی سەرەکی', optOffersText:'بەشی ئۆفەر',
       lblPiece:'نرخی دانه', lblCarton:'نرخی کارتۆن', lblUnits:'ژمارەی دانه له کارتۆنێکدا', lblDesc:'تێبینی / وردەکاری',
@@ -103,7 +110,7 @@
       infoBody:'١- عزيزي الزبون، عند طلب منتج من موقع كوگا سيصلك خلال ٣-٥ أيام.\n٢- لطلب منتج أو إضافة منتج تواصل مع الرقم 07508457841',
       formTitleAdd:'إضافة منتج', formTitleEdit:'تعديل المنتج',
       lblImages:'صور المنتج (روابط)', addImageBtn:'+ إضافة صورة أخرى',
-      lblName:'اسم المنتج', lblCode:'كود المنتج', lblCompany:'اسم الشركة',
+      lblName:'اسم المنتج', lblCode:'كود المنتج', lblCompany:'اسم الشركة', lblTrend:'نوع المنتج (أصلي / تقليد / ماستر كوبي)',
       lblCategory:'الفئة', lblCategoryHint:'(يمكنك اختيار أكثر من فئة)', lblSection:'مكان الظهور',
       optMainText:'الرئيسية', optOffersText:'العروض',
       lblPiece:'سعر القطعة', lblCarton:'سعر الكرتون', lblUnits:'عدد القطع في الكرتون', lblDesc:'ملاحظات / تفاصيل',
@@ -137,7 +144,7 @@
       infoBody:'1- Dear customer, orders placed on the Koga website arrive within 3-5 days.\n2- To order a product or list a product, contact 07508457841',
       formTitleAdd:'Add product', formTitleEdit:'Edit product',
       lblImages:'Product images (links)', addImageBtn:'+ Add another image',
-      lblName:'Product name', lblCode:'Product code', lblCompany:'Company name',
+      lblName:'Product name', lblCode:'Product code', lblCompany:'Company name', lblTrend:'Product type (Original / Copy / Master Copy)',
       lblCategory:'Category', lblCategoryHint:'(you can pick more than one)', lblSection:'Show in',
       optMainText:'Main', optOffersText:'Offers',
       lblPiece:'Piece price', lblCarton:'Carton price', lblUnits:'Pieces per carton', lblDesc:'Notes / details',
@@ -340,6 +347,7 @@
     if(view === 'offers') renderOffers();
     if(view === 'search') renderSearchPage();
     if(view === 'cart') updateCartUI();
+    if(view === 'home') updateBannerVisibility();
   }
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -355,21 +363,25 @@
     });
   });
 
-  /* ============ Smart scroll header (Home only) ============ */
+  /* ============ Top banner: visible only at the absolute top of the page ============
+     Only window.scrollY (clamped at 0 or below, to absorb iOS rubber-band
+     overscroll) decides visibility — no direction-tracking, no threshold
+     comparisons — which also removes the old flicker/jump bug that showed
+     up when the page bounced at the very bottom. */
+  function updateBannerVisibility(){
+    const banner = document.getElementById('topBanner');
+    if(!banner) return;
+    if(currentView !== 'home'){ return; }
+    if(window.scrollY <= 0){ banner.classList.remove('hidden'); }
+    else { banner.classList.add('hidden'); }
+  }
   (function initSmartScroll(){
-    let lastY = window.scrollY;
     let ticking = false;
     window.addEventListener('scroll', () => {
       if(ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const banner = document.getElementById('topBanner');
-        const y = window.scrollY;
-        if(currentView === 'home' && banner){
-          if(y > lastY && y > 90){ banner.classList.add('hidden'); }
-          else if(y < lastY){ banner.classList.remove('hidden'); }
-        }
-        lastY = y;
+        updateBannerVisibility();
         ticking = false;
       });
     }, { passive: true });
@@ -427,6 +439,7 @@
     document.getElementById('lblName').innerHTML = dict.lblName + ' <span class="req">*</span>';
     setText('lblCode', dict.lblCode);
     setText('lblCompany', dict.lblCompany);
+    setText('lblTrend', dict.lblTrend);
     document.getElementById('lblCategory').innerHTML = dict.lblCategory + ' <span class="hint" id="lblCategoryHint">' + dict.lblCategoryHint + '</span>';
     setText('lblSection', dict.lblSection);
     setText('optMainText', dict.optMainText);
@@ -523,6 +536,7 @@
     const imgs = productImages(p);
     const img = imgs[0] ? escapeHtml(imgs[0]) : '';
     const oosOverlay = p.outOfStock ? `<div class="card-oos-overlay"><span>${dict.oosLabel}</span></div>` : '';
+    const trendHtml = p.trend ? `<span class="card-trend">${escapeHtml(p.trend)}</span>` : '';
     return `
     <div class="card ${p.section === 'offers' ? 'is-offer' : ''}" data-view="${p.id}">
       <div class="card-media">
@@ -532,6 +546,7 @@
       <div class="card-body">
         <div class="card-title">${escapeHtml(p.name)}</div>
         <div class="card-price"><span class="sym">${dict.currency}</span>${priceDisplay(p.piecePrice)}</div>
+        ${trendHtml}
       </div>
     </div>`;
   }
@@ -626,6 +641,8 @@
     const imgs = productImages(p);
     const track = document.getElementById('detailTrack');
     const dotsWrap = document.getElementById('detailDots');
+    const prevBtn = document.getElementById('detailPrevBtn');
+    const nextBtn = document.getElementById('detailNextBtn');
     const slides = imgs.length ? imgs : [''];
     track.innerHTML = slides.map(src => `<div class="slide"><img src="${escapeHtml(src)}" referrerpolicy="no-referrer" onerror="handleImgError(this)"></div>`).join('');
     dotsWrap.innerHTML = slides.length > 1
@@ -633,15 +650,29 @@
       : '';
     track.scrollLeft = 0;
     const dots = dotsWrap.querySelectorAll('.detail-dot');
+    const hasMultiple = slides.length > 1;
+    prevBtn.hidden = !hasMultiple;
+    nextBtn.hidden = !hasMultiple;
+
+    function currentIndex(){
+      return Math.round(track.scrollLeft / track.clientWidth);
+    }
+    function goToSlide(idx){
+      const clamped = Math.max(0, Math.min(slides.length - 1, idx));
+      track.scrollTo({ left: clamped * track.clientWidth, behavior: 'smooth' });
+    }
     track.onscroll = () => {
       if(dots.length === 0) return;
-      const idx = Math.round(track.scrollLeft / track.clientWidth);
+      const idx = currentIndex();
       dots.forEach((d, di) => d.classList.toggle('active', di === idx));
     };
+    prevBtn.onclick = () => goToSlide(currentIndex() - 1);
+    nextBtn.onclick = () => goToSlide(currentIndex() + 1);
 
     document.getElementById('detailName').textContent = p.name;
     document.getElementById('detailPiece').textContent = priceDisplay(p.piecePrice) || dict.noValue;
     document.getElementById('detailPieceLabel').textContent = dict.currency;
+    document.getElementById('detailTrend').textContent = p.trend || '';
     document.getElementById('detailCarton').textContent = priceDisplay(p.cartonPrice) || dict.noCarton;
     document.getElementById('detailUnits').textContent = p.units || dict.noCarton;
     document.getElementById('detailCode').textContent = p.code || dict.noValue;
@@ -769,6 +800,7 @@
         document.getElementById('fName').value = p.name || '';
         document.getElementById('fCode').value = p.code || '';
         document.getElementById('fCompany').value = p.company || '';
+        document.getElementById('fTrend').value = p.trend || '';
         const selCats = p.categories && p.categories.length ? p.categories : (p.category ? [p.category] : []);
         renderFormCategoryChips(selCats);
         setSection(p.section === 'offers' ? 'offers' : 'main');
@@ -839,6 +871,7 @@
       name: document.getElementById('fName').value.trim(),
       code: document.getElementById('fCode').value.trim(),
       company: document.getElementById('fCompany').value.trim(),
+      trend: document.getElementById('fTrend').value.trim(),
       categories: getSelectedFormCategories(),
       section: section,
       piecePrice: piece,
